@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Visit Report - Villa Hortensia</title>
+<!-- Fonts -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&amp;family=Work+Sans:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<!-- Icons -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "inverse-surface": "#31312b",
+                    "secondary-container": "#d6eab6",
+                    "tertiary-fixed-dim": "#eabda2",
+                    "on-primary": "#ffffff",
+                    "on-tertiary-fixed-variant": "#5f402b",
+                    "on-primary-fixed-variant": "#304e25",
+                    "primary-fixed-dim": "#add19b",
+                    "primary-container": "#2d4b22",
+                    "surface-dim": "#dddad1",
+                    "tertiary-container": "#5c3d29",
+                    "error-container": "#ffdad6",
+                    "on-error-container": "#93000a",
+                    "primary-fixed": "#c8edb5",
+                    "surface-container-high": "#ebe8df",
+                    "surface-bright": "#fcf9f0",
+                    "background": "#fcf9f0",
+                    "outline": "#73796e",
+                    "on-primary-container": "#97bb87",
+                    "error": "#ba1a1a",
+                    "secondary": "#53643b",
+                    "on-secondary-container": "#596a41",
+                    "surface-container": "#f1eee5",
+                    "on-secondary": "#ffffff",
+                    "on-primary-fixed": "#052101",
+                    "tertiary-fixed": "#ffdbc7",
+                    "surface": "#fcf9f0",
+                    "secondary-fixed": "#d6eab6",
+                    "inverse-on-surface": "#f4f1e8",
+                    "on-tertiary-fixed": "#2d1505",
+                    "tertiary": "#432715",
+                    "surface-tint": "#47673a",
+                    "outline-variant": "#c3c8bc",
+                    "on-surface": "#1c1c17",
+                    "surface-container-highest": "#e5e2da",
+                    "on-error": "#ffffff",
+                    "on-surface-variant": "#43483f",
+                    "on-secondary-fixed-variant": "#3c4c26",
+                    "on-tertiary-container": "#d4a88e",
+                    "surface-container-lowest": "#ffffff",
+                    "on-tertiary": "#ffffff",
+                    "primary": "#17340e",
+                    "secondary-fixed-dim": "#bacd9c",
+                    "surface-variant": "#e5e2da",
+                    "on-secondary-fixed": "#121f01",
+                    "on-background": "#1c1c17",
+                    "inverse-primary": "#add19b",
+                    "surface-container-low": "#f6f3ea"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.125rem",
+                    "lg": "0.25rem",
+                    "xl": "0.5rem",
+                    "full": "0.75rem"
+            },
+            "fontFamily": {
+                    "headline": ["Manrope"],
+                    "body": ["Work Sans"],
+                    "label": ["Work Sans"]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+      .material-symbols-outlined {
+        font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+      }
+      .bg-primary-gradient {
+        background: linear-gradient(135deg, #17340e 0%, #2d4b22 100%);
+      }
+      body {
+        font-family: 'Work Sans', sans-serif;
+        background-color: #fcf9f0;
+      }
+      h1, h2, h3 {
+        font-family: 'Manrope', sans-serif;
+      }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+</head>
+<body class="text-on-surface antialiased mb-24">
+<!-- Top Navigation Bar -->
+<nav class="fixed top-0 w-full z-50 bg-[#fcf9f0]/80 backdrop-blur-md flex items-center justify-between px-6 py-4">
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-[#17340e]">arrow_back</span>
+<h1 class="font-manrope font-bold text-xl tracking-tight text-[#17340e]">Visit Report</h1>
+</div>
+<div class="hidden md:flex gap-8">
+<a class="text-[#17340e] font-bold transition-opacity hover:opacity-70" href="#">My Garden</a>
+<a class="text-[#1c1c17]/60 transition-opacity hover:opacity-70" href="#">History</a>
+<a class="text-[#1c1c17]/60 transition-opacity hover:opacity-70" href="#">Messages</a>
+</div>
+<div class="w-6"></div> <!-- Spacer for symmetry -->
+</nav>
+<main class="max-w-4xl mx-auto pt-16 px-0 md:px-6">
+<!-- Reduced Hero Section (Header-style) -->
+<section class="relative h-[240px] w-full overflow-hidden md:rounded-b-[3rem] shadow-lg">
+<img alt="Villa Hortensia Garden" class="absolute inset-0 w-full h-full object-cover" data-alt="Lush private garden with manicured lawn, vibrant flower beds, and a stone path leading through white roses at sunrise" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAli2862c54yIiShbdM8xpK1XhMWCkjrOkbOjtamFHt_A-N9YSPbgw68zEUlZNX8Zbe8oDmnrAHQS_cDB7eFzkw-JXyBBrYQAuz2AGv0Juxq3CMMHhv1lI8WOZghFd4hKE3SkJ0aRl40E-5PAacsvhrtlVrIsJM84cVw4ieacxenuNPGUA146-baaA_M1ilBh53wjHYipLMkEwk90YSMGhKkZ36uKRa6_lNNDIZKY2LQlbq0gJFV2VkMkGTnlYxrr9EYz560JgQk3w7"/>
+<div class="absolute inset-0 bg-gradient-to-t from-[#17340e]/90 via-[#17340e]/20 to-transparent"></div>
+<div class="absolute bottom-16 left-8">
+<p class="font-label text-white/80 uppercase tracking-widest text-[10px] mb-1">Estate Grounds</p>
+<h2 class="font-headline font-extrabold text-3xl md:text-4xl text-white tracking-tight">Villa Hortensia</h2>
+</div>
+</section>
+<!-- Status & Logistics Section -->
+<div class="px-6 -mt-10 relative z-10 grid grid-cols-1 md:grid-cols-12 gap-6">
+<!-- Left Column: Status Badge & Logistics -->
+<div class="md:col-span-7 space-y-6">
+<!-- Verified Visit Badge -->
+<div class="bg-surface-container-lowest rounded-full p-2 pr-6 flex items-center gap-3 shadow-xl w-fit">
+<div class="bg-secondary-container text-on-secondary-container w-10 h-10 rounded-full flex items-center justify-center">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+</div>
+<div>
+<p class="font-label text-[10px] uppercase tracking-widest text-on-surface-variant font-bold">Telemetric Security</p>
+<p class="font-headline font-bold text-[#17340e]">VERIFIED VISIT</p>
+</div>
+</div>
+<!-- Logistics Card -->
+<div class="bg-surface-container-low rounded-3xl p-6 md:p-8 space-y-6">
+<div class="flex justify-between items-end border-b border-outline-variant/15 pb-6">
+<div>
+<p class="font-label text-[11px] uppercase tracking-widest text-on-surface-variant mb-1">Visit Date</p>
+<p class="font-headline font-bold text-2xl text-on-surface">June 12, 2026</p>
+</div>
+<div class="text-right">
+<p class="font-label text-[11px] uppercase tracking-widest text-on-surface-variant mb-1">Duration</p>
+<p class="font-headline font-bold text-2xl text-primary">01:45:12</p>
+</div>
+</div>
+<!-- Gardener Info -->
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-4">
+<img alt="Carlos Ruiz" class="w-12 h-12 rounded-full object-cover" data-alt="Professional gardener portrait, mid-40s male with friendly expression, wearing a tan outdoor work shirt" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD9WM8oi89MnMAHIlcmkGDyCOtI-37xNSofQGsaF_ENps0e5Hf0_9RHwu8KjHG0ueqgC-5GIGXHEUIsXzom5qF0QtSYWSFp4_pObr_xEJGOdVegpTApbjUJQHkGqCmq4rzsZj0dGjPCCQ3Pf3R6Wmi8rAmRXM9gSuywbqEO-jjwJYTs92es2GCOLqd2fnDKVZBElbGpZHlpvcfsSdaOSU4H5FbD-XD5l0SH-S3GsjVpIYGlGZn6xrjdlNdb10-fF3VBMhVYugTaO6jk"/>
+<div>
+<p class="font-headline font-bold text-base md:text-lg leading-tight">Carlos Ruiz</p>
+<p class="font-body text-on-surface-variant text-xs">Lead Gardener</p>
+</div>
+</div>
+<button class="w-10 h-10 rounded-xl bg-primary text-white flex items-center justify-center transition-transform active:scale-95 shadow-md">
+<span class="material-symbols-outlined text-xl">call</span>
+</button>
+</div>
+</div>
+<!-- Task Description Block -->
+<section class="bg-surface rounded-3xl p-6 md:p-8">
+<h3 class="font-headline font-bold text-xl mb-4 text-[#17340e]">Work Performed</h3>
+<p class="font-body text-on-surface-variant leading-relaxed text-base italic">
+                        "The morning began with a comprehensive lawn maintenance cycle. We performed high-precision mowing to a 2.5-inch height and manicured all edges bordering the stone path. The climbing roses on the north trellis were pruned to encourage seasonal growth, and we applied a deep organic fertilizer to the main flower beds. Soil moisture levels are currently optimal."
+                    </p>
+</section>
+</div>
+<!-- Right Column: Gallery (Bento Style) -->
+<div class="md:col-span-5 space-y-4">
+<h3 class="font-label text-[11px] uppercase tracking-widest text-on-surface-variant px-2">Visual Documentation</h3>
+<div class="grid grid-cols-2 gap-4">
+<div class="col-span-2 h-56 rounded-3xl overflow-hidden relative group">
+<img alt="Lawn mowing" class="w-full h-full object-cover" data-alt="Close-up of a perfectly striped green lawn after professional mowing, deep green grass under afternoon sun" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBpOF9sGNJ_A9859YuXdtM2UVkRB69JHruJ7kkfY5LshbJcXDIjx_pGP7taQu3Zek0NpekcOA-aUvBBR-hh6MIUESky84CCzfuWbHIHpOWkyIDoxpdKSqW7JJzst2ZVYwPN5PheCrTOn_2EXyT9hKbM1bMf8Zp13ADZL28g3q9CeScroSoHq8YQjr7fJ0abjMrkyl-rk7KTI3Zr-q0wlZN-t-iwjgxmEm10fgxp9-D6Gxc_n45CajOOTcweZOyql12oWYw5quAMzcsE"/>
+<div class="absolute bottom-4 left-4 bg-black/30 backdrop-blur-md px-3 py-1 rounded-full">
+<p class="text-white text-[10px] font-bold">LAWN MOWING</p>
+</div>
+</div>
+<div class="h-40 rounded-3xl overflow-hidden relative group">
+<img alt="Rose pruning" class="w-full h-full object-cover" data-alt="Hand in a leather gardening glove carefully pruning a red rose bush with sharp garden shears" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCO6hHLuMizqGBuq374EyQOy6Px6Ywpt0VnK-mSnOTJLc-tJL2QtBYEQxSa7jkfnGc1YWw5UVJsvnnMuYWApslrLWFQP4fHdNUonPwoBP5ryLTikpCGh6D_kTOIR9iJzVMEPGnLBfQ5pkMyJvHNR0UfBdFy9jpJpErDs2-rQUlG4j7UtVeGqDTxGp8AmhxrzKs9hBe2iQvwXBLgAwOhFTYcLG9YPcUkG1gDzTIMFG2ERI6r503iRczIEL5IUNrszeX58l2wWBpVPi6n"/>
+<div class="absolute bottom-4 left-4 bg-black/30 backdrop-blur-md px-3 py-1 rounded-full">
+<p class="text-white text-[10px] font-bold">ROSE CARE</p>
+</div>
+</div>
+<div class="h-40 rounded-3xl overflow-hidden relative group">
+<img alt="Fertilizer application" class="w-full h-full object-cover" data-alt="Close up of dark rich organic soil being treated with natural fertilizer pellets in a garden bed" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDXZ45acj23TYY0OWtsryJsI2m64WKNrju9AzE_kmgV3e4y1dHOsX3NwINt4UZ0b2_dewUl_qSc9urmMHX5Z1hoytU2S-4_y0NWMYZobYhQTxSrtJvb6e3I8eC3ZnCgWKlZccG0ZavUmSavkIqwsE1-MK3XbUatoieSv2r1pD89AInyEGzWoJkHJtvwYqArMt_EvFdb7EEzEYf2n770KjRr8qxymu96sLxLFDiOG4nOqaoLZImr_oi0OpFW8HAH-x9kuKjO4wVIRazm"/>
+<div class="absolute bottom-4 left-4 bg-black/30 backdrop-blur-md px-3 py-1 rounded-full">
+<p class="text-white text-[10px] font-bold">FEEDING</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Footnote / Logo -->
+<footer class="mt-16 pb-12 text-center">
+<div class="flex items-center justify-center gap-2 text-[#17340e] opacity-30 mb-2">
+<span class="material-symbols-outlined text-lg">spa</span>
+<span class="font-manrope font-extrabold tracking-tighter text-sm uppercase">Arbor Ethos</span>
+</div>
+<p class="font-label text-[10px] text-on-surface-variant uppercase tracking-widest">Certified Digital Report #VH-61226</p>
+</footer>
+</main>
+<!-- Bottom Navigation Bar (Mobile Only) -->
+<nav class="md:hidden fixed bottom-0 left-0 w-full z-50 bg-[#fcf9f0]/90 backdrop-blur-xl flex justify-around items-center px-4 pt-3 pb-6 rounded-t-3xl shadow-[0_-4px_24px_rgba(28,28,23,0.06)] border-t border-[#e5e2da]/15">
+<div class="flex flex-col items-center justify-center text-[#1c1c17]/50 px-5 py-2">
+<span class="material-symbols-outlined mb-1">yard</span>
+<span class="font-sans text-[11px] uppercase tracking-widest font-semibold">My Garden</span>
+</div>
+<div class="flex flex-col items-center justify-center bg-[#e5e2da] text-[#17340e] rounded-xl px-5 py-2 scale-90 transition-all duration-300 ease-out">
+<span class="material-symbols-outlined mb-1">history</span>
+<span class="font-sans text-[11px] uppercase tracking-widest font-semibold">History</span>
+</div>
+<div class="flex flex-col items-center justify-center text-[#1c1c17]/50 px-5 py-2">
+<span class="material-symbols-outlined mb-1">chat_bubble</span>
+<span class="font-sans text-[11px] uppercase tracking-widest font-semibold">Messages</span>
+</div>
+</nav>
+</body></html>

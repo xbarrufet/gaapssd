@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>GAPP Garden - Visites Fetes</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;700;800&amp;family=Work_Sans:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "primary-fixed-dim": "#add19b",
+                        "surface-tint": "#47673a",
+                        "inverse-primary": "#add19b",
+                        "outline-variant": "#c3c8bc",
+                        "surface": "#fcf9f0",
+                        "on-primary-container": "#97bb87",
+                        "on-tertiary-fixed-variant": "#5f402b",
+                        "tertiary-fixed": "#ffdbc7",
+                        "surface-bright": "#fcf9f0",
+                        "surface-container-low": "#f6f3ea",
+                        "inverse-on-surface": "#f4f1e8",
+                        "surface-variant": "#e5e2da",
+                        "on-secondary-container": "#596a41",
+                        "secondary-fixed-dim": "#bacd9c",
+                        "on-error": "#ffffff",
+                        "tertiary": "#432715",
+                        "outline": "#73796e",
+                        "tertiary-container": "#5c3d29",
+                        "on-tertiary": "#ffffff",
+                        "primary-fixed": "#c8edb5",
+                        "on-primary": "#ffffff",
+                        "error": "#ba1a1a",
+                        "inverse-surface": "#31312b",
+                        "on-surface-variant": "#43483f",
+                        "secondary": "#53643b",
+                        "surface-container": "#f1eee5",
+                        "primary": "#17340e",
+                        "error-container": "#ffdad6",
+                        "on-primary-fixed-variant": "#304e25",
+                        "on-primary-fixed": "#052101",
+                        "tertiary-fixed-dim": "#eabda2",
+                        "on-tertiary-fixed": "#2d1505",
+                        "secondary-fixed": "#d6eab6",
+                        "on-error-container": "#93000a",
+                        "primary-container": "#2d4b22",
+                        "on-secondary": "#ffffff",
+                        "background": "#fcf9f0",
+                        "on-background": "#1c1c17",
+                        "surface-container-lowest": "#ffffff",
+                        "on-secondary-fixed": "#121f01",
+                        "secondary-container": "#d6eab6",
+                        "on-tertiary-container": "#d4a88e",
+                        "on-surface": "#1c1c17",
+                        "on-secondary-fixed-variant": "#3c4c26",
+                        "surface-dim": "#dddad1",
+                        "surface-container-highest": "#e5e2da",
+                        "surface-container-high": "#ebe8df"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "fontFamily": {
+                        "headline": ["Manrope"],
+                        "body": ["Work Sans"],
+                        "label": ["Work Sans"]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .primary-gradient {
+            background: linear-gradient(135deg, #17340e 0%, #2d4b22 100%);
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+</head>
+<body class="bg-surface text-on-surface font-body min-h-screen">
+<!-- TopAppBar -->
+<header class="fixed top-0 w-full z-50 bg-[#fcf9f0]/80 dark:bg-stone-950/80 backdrop-blur-md shadow-sm shadow-stone-900/5 flex justify-between items-center px-6 py-4 w-full">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full overflow-hidden bg-surface-container-highest">
+<img alt="Gardener's professional profile photo" class="w-full h-full object-cover" data-alt="Professional gardener portrait, mid-40s, friendly expression, wearing a forest green outdoor uniform in a sunlit garden" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBi8eJ6x5C8RS8VrQo1y-WZ2J9RagVqSJKeJPLNv2cdtltHfVxyVoZTA-GDif6vDDzOt-O0zK8fCcYVow_El-L3npzRl1PcWOUvCOZvdl-xH_Rs8f8UzsRejYgXpfCoEWlNNJmEV89uQNgQdkq3Do1vtTRvAyeHZflvzvfiyO-vO5bmLsPnFv3cLJ2gtz3R0G8NCjiQxfBIoDD1XGdtm5Oe9O5vE0gO_4immaPioJdYjbunqf-viXk7fZLs6qJDA1o1rYEiY0mww_Bu"/>
+</div>
+<h1 class="text-[#17340e] dark:text-[#fcf9f0] font-['Manrope'] font-bold tracking-tight text-2xl">GAPP Garden</h1>
+</div>
+<button class="text-[#17340e] dark:text-[#fcf9f0] hover:bg-stone-200/50 dark:hover:bg-stone-800/50 transition-colors p-2 rounded-full active:scale-95 duration-150 ease-in-out">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+</header>
+<main class="pt-[72px] pb-32">
+<!-- Hero Section (25%) -->
+<section class="relative h-[265px] w-full px-4 pt-4">
+<div class="w-full h-full rounded-[2rem] overflow-hidden relative shadow-lg">
+<img alt="Beautiful Garden" class="w-full h-full object-cover" data-alt="Lush, manicured Mediterranean garden with stone paths, lavender bushes, and olive trees under soft morning sunlight" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAmFTSSW8e_0TjF79LBTTT4gkFYD0NtRdSqhMcyNbkyVCIryaNjBCrvm72BlmEFmXUjiDI9UzvDejqlrslDI1Maa5uBCTTA_1sNtBzwISUs3LmC_QZ-xib8DtI3WvsmJef7oIfFTN7YSXYS8oA-m3jTHnam5YQO_0DPpUfTxUFqq0935I4GIUOQ7L-_aRlxV3RWArG20M_LnaGUDF1Ffj6VDY3-dML118_1YfkoFv1IaGbJGRHFeb8Yh9Dpij2E36LnXWgKGHHwdyY6"/>
+<!-- Overlay indicator -->
+<div class="absolute bottom-6 right-6 bg-surface/90 backdrop-blur-md px-4 py-2 rounded-full shadow-sm">
+<p class="font-headline font-bold text-primary text-sm tracking-tight">Casa Rural Puig</p>
+</div>
+<!-- Gradient overlay for depth -->
+<div class="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent pointer-events-none"></div>
+</div>
+</section>
+<!-- Visits List Header -->
+<section class="px-6 mt-8 mb-6">
+<h2 class="font-headline font-extrabold text-3xl text-primary tracking-tighter">Visits</h2>
+<p class="font-label text-stone-500 uppercase tracking-widest text-[10px] mt-1">Verified Maintenance Logs</p>
+</section>
+<!-- Visits List -->
+<section class="px-4 space-y-4">
+<!-- Visit Item 1 -->
+<div class="bg-surface-container-low p-5 rounded-[1.5rem] flex flex-col md:flex-row gap-4">
+<!-- Left Column: Date -->
+<div class="flex md:flex-col items-baseline md:items-center justify-start md:justify-center md:min-w-[80px] border-r-0 md:border-r border-outline-variant/15 md:pr-4">
+<span class="font-headline font-extrabold text-2xl text-primary leading-none">08</span>
+<span class="font-label font-bold text-xs uppercase text-stone-400 ml-2 md:ml-0 md:mt-1">APR</span>
+</div>
+<!-- Right Column: Content -->
+<div class="flex-1">
+<div class="flex justify-between items-start">
+<div class="flex-1 pr-4">
+<h3 class="font-headline font-bold text-lg text-primary leading-tight">Pruning and Clearing</h3>
+<p class="font-body text-on-surface-variant text-sm mt-2 line-clamp-2">
+                                Pruned the ornamental shrubs along the main walkway and cleared seasonal debris from the perennial beds.
+                            </p>
+</div>
+<div class="flex flex-col items-center justify-center bg-primary-container/10 border border-primary-container/20 rounded-xl px-3 py-2 min-w-[100px]">
+<span class="material-symbols-outlined text-primary text-xl" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+<span class="font-label font-bold text-[10px] text-primary uppercase tracking-wider mt-1 whitespace-nowrap">Verified Visit</span>
+</div>
+</div>
+<!-- Action Buttons -->
+<div class="flex gap-3 mt-4">
+<button class="primary-gradient text-white font-label text-[11px] font-bold uppercase tracking-wider px-4 py-2 rounded-xl hover:opacity-90 transition-opacity active:scale-95">
+                            View Details
+                        </button>
+<button class="bg-surface-container-highest text-secondary font-label text-[11px] font-bold uppercase tracking-wider px-4 py-2 rounded-xl hover:bg-stone-200 transition-colors active:scale-95">
+                            Comment
+                        </button>
+</div>
+</div>
+</div>
+<!-- Visit Item 2 -->
+<div class="bg-surface-container-low p-5 rounded-[1.5rem] flex flex-col md:flex-row gap-4">
+<div class="flex md:flex-col items-baseline md:items-center justify-start md:justify-center md:min-w-[80px] border-r-0 md:border-r border-outline-variant/15 md:pr-4">
+<span class="font-headline font-extrabold text-2xl text-primary leading-none">02</span>
+<span class="font-label font-bold text-xs uppercase text-stone-400 ml-2 md:ml-0 md:mt-1">APR</span>
+</div>
+<div class="flex-1">
+<div class="flex justify-between items-start">
+<div class="flex-1 pr-4">
+<h3 class="font-headline font-bold text-lg text-primary leading-tight">Lawn Mowing</h3>
+<p class="font-body text-on-surface-variant text-sm mt-2 line-clamp-2">
+                                Standard lawn maintenance completed. Edges trimmed and fertilization applied to the north sector.
+                            </p>
+</div>
+<div class="flex flex-col items-center justify-center bg-primary-container/10 border border-primary-container/20 rounded-xl px-3 py-2 min-w-[100px]">
+<span class="material-symbols-outlined text-primary text-xl" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+<span class="font-label font-bold text-[10px] text-primary uppercase tracking-wider mt-1 whitespace-nowrap">Verified Visit</span>
+</div>
+</div>
+<div class="flex gap-3 mt-4">
+<button class="primary-gradient text-white font-label text-[11px] font-bold uppercase tracking-wider px-4 py-2 rounded-xl active:scale-95">
+                            View Details
+                        </button>
+<button class="bg-surface-container-highest text-secondary font-label text-[11px] font-bold uppercase tracking-wider px-4 py-2 rounded-xl active:scale-95">
+                            Comment
+                        </button>
+</div>
+</div>
+</div>
+<!-- Visit Item 3 -->
+<div class="bg-surface-container-low p-5 rounded-[1.5rem] flex flex-col md:flex-row gap-4 opacity-80">
+<div class="flex md:flex-col items-baseline md:items-center justify-start md:justify-center md:min-w-[80px] border-r-0 md:border-r border-outline-variant/15 md:pr-4">
+<span class="font-headline font-extrabold text-2xl text-primary leading-none">26</span>
+<span class="font-label font-bold text-xs uppercase text-stone-400 ml-2 md:ml-0 md:mt-1">MAR</span>
+</div>
+<div class="flex-1">
+<div class="flex justify-between items-start">
+<div class="flex-1 pr-4">
+<h3 class="font-headline font-bold text-lg text-primary leading-tight">Irrigation Check</h3>
+<p class="font-body text-on-surface-variant text-sm mt-2 line-clamp-2">
+                                Verified all sprinkler heads for proper coverage. Replaced one damaged valve in zone 3.
+                            </p>
+</div>
+<div class="flex flex-col items-center justify-center bg-stone-200/50 border border-stone-300 rounded-xl px-3 py-2 min-w-[100px]">
+<span class="material-symbols-outlined text-stone-600 text-xl">info</span>
+<span class="font-label font-bold text-[10px] text-stone-600 uppercase tracking-wider mt-1 whitespace-nowrap">Manual Entry</span>
+</div>
+</div>
+<div class="flex gap-3 mt-4">
+<button class="primary-gradient text-white font-label text-[11px] font-bold uppercase tracking-wider px-4 py-2 rounded-xl active:scale-95">
+                            View Details
+                        </button>
+<button class="bg-surface-container-highest text-secondary font-label text-[11px] font-bold uppercase tracking-wider px-4 py-2 rounded-xl active:scale-95">
+                            Comment
+                        </button>
+</div>
+</div>
+</div>
+</section>
+</main>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 left-0 w-full flex justify-around items-center px-4 pb-8 pt-4 bg-[#fcf9f0] dark:bg-stone-950 z-50 rounded-t-[2rem] shadow-[0_-4px_24px_-4px_rgba(28,28,23,0.06)]">
+<!-- Visits (Active) -->
+<a class="flex flex-col items-center justify-center bg-[#2d4b22] text-[#fcf9f0] rounded-[1.25rem] px-5 py-2.5 transition-all active:scale-90 duration-200" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">potted_plant</span>
+<span class="font-['Work_Sans'] text-[11px] uppercase tracking-widest font-semibold mt-1">Visits</span>
+</a>
+<!-- Inbox (Inactive) -->
+<a class="flex flex-col items-center justify-center text-stone-500 dark:text-stone-400 px-5 py-2.5 hover:text-[#17340e] dark:hover:text-white transition-colors active:scale-90 duration-200" href="#">
+<span class="material-symbols-outlined">chat_bubble</span>
+<span class="font-['Work_Sans'] text-[11px] uppercase tracking-widest font-semibold mt-1">Inbox</span>
+</a>
+<!-- Settings (Inactive) -->
+<a class="flex flex-col items-center justify-center text-stone-500 dark:text-stone-400 px-5 py-2.5 hover:text-[#17340e] dark:hover:text-white transition-colors active:scale-90 duration-200" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span class="font-['Work_Sans'] text-[11px] uppercase tracking-widest font-semibold mt-1">Settings</span>
+</a>
+</nav>
+</body></html>

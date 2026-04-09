@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>GAPP - Garden Application Login</title>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&amp;family=Work+Sans:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "surface-tint": "#47673a",
+                    "tertiary-fixed-dim": "#eabda2",
+                    "on-secondary-container": "#596a41",
+                    "on-background": "#1c1c17",
+                    "background": "#fcf9f0",
+                    "on-tertiary-fixed-variant": "#5f402b",
+                    "surface-dim": "#dddad1",
+                    "primary-fixed-dim": "#add19b",
+                    "primary-container": "#2d4b22",
+                    "on-secondary-fixed": "#121f01",
+                    "surface-container-high": "#ebe8df",
+                    "tertiary-fixed": "#ffdbc7",
+                    "tertiary": "#432715",
+                    "on-primary-fixed-variant": "#304e25",
+                    "inverse-on-surface": "#f4f1e8",
+                    "surface-variant": "#e5e2da",
+                    "secondary-fixed": "#d6eab6",
+                    "surface": "#fcf9f0",
+                    "error": "#ba1a1a",
+                    "surface-container": "#f1eee5",
+                    "tertiary-container": "#5c3d29",
+                    "outline": "#73796e",
+                    "on-secondary": "#ffffff",
+                    "surface-container-lowest": "#ffffff",
+                    "outline-variant": "#c3c8bc",
+                    "error-container": "#ffdad6",
+                    "on-surface": "#1c1c17",
+                    "inverse-primary": "#add19b",
+                    "inverse-surface": "#31312b",
+                    "on-error-container": "#93000a",
+                    "primary": "#17340e",
+                    "on-primary": "#ffffff",
+                    "surface-container-low": "#f6f3ea",
+                    "secondary": "#53643b",
+                    "surface-container-highest": "#e5e2da",
+                    "surface-bright": "#fcf9f0",
+                    "on-tertiary": "#ffffff",
+                    "on-primary-container": "#97bb87",
+                    "on-surface-variant": "#43483f",
+                    "secondary-fixed-dim": "#bacd9c",
+                    "secondary-container": "#d6eab6",
+                    "on-tertiary-fixed": "#2d1505",
+                    "on-tertiary-container": "#d4a88e",
+                    "primary-fixed": "#c8edb5",
+                    "on-error": "#ffffff",
+                    "on-primary-fixed": "#052101",
+                    "on-secondary-fixed-variant": "#3c4c26"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.125rem",
+                    "lg": "0.25rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "fontFamily": {
+                    "headline": ["Manrope"],
+                    "body": ["Work Sans"],
+                    "label": ["Work Sans"]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .glass-panel {
+            background: rgba(252, 249, 240, 0.7);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+        }
+        .primary-gradient {
+            background: linear-gradient(135deg, #17340e 0%, #2d4b22 100%);
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-surface font-body text-on-surface selection:bg-primary-fixed selection:text-on-primary-fixed min-h-screen flex flex-col relative overflow-hidden">
+<!-- Background Layer -->
+<div class="fixed inset-0 z-0">
+<img class="w-full h-full object-cover opacity-60 scale-105 blur-sm" data-alt="Dreamy out-of-focus garden landscape with dappled sunlight hitting lush green ferns and vibrant flowering plants in a serene morning atmosphere" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAlD_AzKcPcQWFZezgoaHJA0smhq6FQQ73a797S1yBFQJRkmuKGp0GPtofDEjeCDdiVErkCz6WxXbK172EIomYR0nJkh4nuBbpOXVKEAN6kZZBzdTbkjL7elMeF2rbQL9tjLX4l_SDwuStZJqaGmlxvirzCWnD120bDC1uBeg-5g3bcuOYHyP0UsQr5A76zkJqHu41N9q-5NBBr27dzZJMcMDMbZms7R3Cvr6x1X7k4HpPed-UPng0sNkszQyVjDX5O-sVsNSjyZEKj"/>
+<div class="absolute inset-0 bg-gradient-to-b from-surface/20 via-transparent to-surface/40"></div>
+</div>
+<!-- Main Content Canvas -->
+<main class="relative z-10 flex-grow flex items-center justify-center px-6 py-12">
+<div class="w-full max-w-md">
+<!-- Brand Identity -->
+<div class="text-center mb-10">
+<div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-surface-container-lowest mb-4 shadow-[0_-4px_24px_-4px_rgba(28,28,23,0.06)]">
+<span class="material-symbols-outlined text-primary text-4xl" data-icon="potted_plant">potted_plant</span>
+</div>
+<h1 class="font-headline font-black text-4xl text-primary tracking-tighter uppercase mb-1">GAPP</h1>
+<p class="font-label text-[10px] uppercase tracking-[0.2em] text-on-surface-variant font-semibold">The Organic Curator</p>
+</div>
+<!-- Login Card -->
+<div class="glass-panel p-8 md:p-10 rounded-xl shadow-[0_24px_48px_-12px_rgba(28,28,23,0.08)] border border-white/20">
+<!-- User Type Toggle -->
+<div class="bg-surface-container-low p-1.5 rounded-full flex mb-8">
+<button class="flex-1 py-2 px-4 rounded-full font-label text-sm font-semibold transition-all duration-300 bg-primary-container text-on-primary-container">
+                        Client
+                    </button>
+<button class="flex-1 py-2 px-4 rounded-full font-label text-sm font-semibold transition-all duration-300 text-on-surface-variant hover:bg-surface-container-highest/50">
+                        Gardener
+                    </button>
+</div>
+<form class="space-y-6">
+<!-- Email Field -->
+<div class="space-y-2">
+<label class="block font-label text-[10px] uppercase tracking-widest font-bold text-on-surface-variant ml-1" for="email">Email Address</label>
+<div class="relative">
+<input class="w-full bg-surface-container-highest/50 border border-outline-variant/15 rounded-xl px-4 py-3.5 font-body text-on-surface placeholder:text-on-surface-variant/40 focus:ring-0 focus:border-primary/40 focus:bg-surface-container-highest transition-all duration-300" id="email" placeholder="curator@garden.app" type="email"/>
+</div>
+</div>
+<!-- Password Field -->
+<div class="space-y-2">
+<div class="flex justify-between items-center px-1">
+<label class="block font-label text-[10px] uppercase tracking-widest font-bold text-on-surface-variant" for="password">Password</label>
+<a class="text-[10px] font-semibold text-primary hover:opacity-80 transition-opacity uppercase tracking-wider" href="#">Forgot Password?</a>
+</div>
+<div class="relative">
+<input class="w-full bg-surface-container-highest/50 border border-outline-variant/15 rounded-xl px-4 py-3.5 font-body text-on-surface placeholder:text-on-surface-variant/40 focus:ring-0 focus:border-primary/40 focus:bg-surface-container-highest transition-all duration-300" id="password" placeholder="••••••••" type="password"/>
+</div>
+</div>
+<!-- Submit Button -->
+<button class="w-full primary-gradient text-white py-4 rounded-xl font-headline font-bold text-lg shadow-xl shadow-primary-container/20 hover:scale-[1.02] active:scale-[0.98] transition-all duration-300 mt-4 flex items-center justify-center gap-2" type="submit">
+<span>Sign In</span>
+<span class="material-symbols-outlined text-xl" data-icon="arrow_forward">arrow_forward</span>
+</button>
+</form>
+<!-- Footer Action -->
+<div class="mt-8 text-center">
+<p class="font-body text-sm text-on-surface-variant">
+                        New to GAPP? 
+                        <a class="font-bold text-primary hover:underline underline-offset-4 decoration-2" href="#">Sign up</a>
+</p>
+</div>
+</div>
+<!-- Social/Secondary Proof (Optional for polish) -->
+<div class="mt-12 flex flex-col items-center gap-6 opacity-80">
+<div class="flex items-center gap-4 w-full">
+<div class="h-[1px] flex-grow bg-outline-variant/30"></div>
+<span class="font-label text-[10px] uppercase tracking-[0.2em] text-on-surface-variant font-bold whitespace-nowrap">Rooted in Excellence</span>
+<div class="h-[1px] flex-grow bg-outline-variant/30"></div>
+</div>
+<div class="flex gap-8">
+<span class="material-symbols-outlined text-secondary" data-icon="nature">nature</span>
+<span class="material-symbols-outlined text-secondary" data-icon="eco">eco</span>
+<span class="material-symbols-outlined text-secondary" data-icon="yard">yard</span>
+</div>
+</div>
+</div>
+</main>
+<!-- Bottom Ornamentation (Editorial Asymmetry) -->
+<div class="fixed bottom-12 right-12 z-0 hidden lg:block opacity-20 rotate-12">
+<span class="material-symbols-outlined text-[160px] text-primary" data-icon="psychiatry">psychiatry</span>
+</div>
+</body></html>

@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>GAPP Messaging - Carlos Ruiz</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&amp;family=Work+Sans:wght@400;500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "surface-bright": "#fcf9f0",
+                      "on-primary": "#ffffff",
+                      "surface-container": "#f1eee5",
+                      "tertiary-container": "#5c3d29",
+                      "secondary-fixed-dim": "#bacd9c",
+                      "on-tertiary": "#ffffff",
+                      "on-surface-variant": "#43483f",
+                      "surface-container-low": "#f6f3ea",
+                      "on-tertiary-container": "#d4a88e",
+                      "surface": "#fcf9f0",
+                      "primary-fixed-dim": "#add19b",
+                      "background": "#fcf9f0",
+                      "on-primary-fixed-variant": "#304e25",
+                      "on-secondary-container": "#596a41",
+                      "primary": "#17340e",
+                      "surface-container-lowest": "#ffffff",
+                      "on-tertiary-fixed": "#2d1505",
+                      "on-secondary-fixed": "#121f01",
+                      "on-secondary": "#ffffff",
+                      "surface-variant": "#e5e2da",
+                      "outline": "#73796e",
+                      "surface-container-highest": "#e5e2da",
+                      "surface-container-high": "#ebe8df",
+                      "secondary": "#53643b",
+                      "on-tertiary-fixed-variant": "#5f402b",
+                      "primary-fixed": "#c8edb5",
+                      "inverse-on-surface": "#f4f1e8",
+                      "on-primary-container": "#97bb87",
+                      "inverse-primary": "#add19b",
+                      "tertiary": "#432715",
+                      "on-error-container": "#93000a",
+                      "error": "#ba1a1a",
+                      "outline-variant": "#c3c8bc",
+                      "inverse-surface": "#31312b",
+                      "on-surface": "#1c1c17",
+                      "on-secondary-fixed-variant": "#3c4c26",
+                      "on-error": "#ffffff",
+                      "tertiary-fixed-dim": "#eabda2",
+                      "secondary-container": "#d6eab6",
+                      "on-primary-fixed": "#052101",
+                      "surface-dim": "#dddad1",
+                      "secondary-fixed": "#d6eab6",
+                      "error-container": "#ffdad6",
+                      "surface-tint": "#47673a",
+                      "tertiary-fixed": "#ffdbc7",
+                      "primary-container": "#2d4b22",
+                      "on-background": "#1c1c17"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.125rem",
+                      "lg": "0.25rem",
+                      "xl": "0.5rem",
+                      "full": "0.75rem"
+              },
+              "fontFamily": {
+                      "headline": ["Manrope"],
+                      "body": ["Work Sans"],
+                      "label": ["Work Sans"]
+              }
+            },
+          },
+        }
+      </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        body { font-family: 'Work Sans', sans-serif; }
+        h1, h2, h3, .font-headline { font-family: 'Manrope', sans-serif; }
+        .glass-header {
+            background: rgba(252, 249, 240, 0.8);
+            backdrop-filter: blur(20px);
+        }
+        .message-shadow {
+            box-shadow: 0 4px 24px -4px rgba(28, 28, 23, 0.06);
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+</head>
+<body class="bg-surface text-on-surface min-h-screen flex flex-col">
+<!-- TopAppBar -->
+<header class="fixed top-0 w-full z-50 glass-header flex justify-between items-center px-6 py-4">
+<div class="flex items-center gap-4">
+<button class="material-symbols-outlined text-primary hover:bg-surface-container-highest/50 rounded-full p-2 transition-colors">arrow_back</button>
+<div class="flex items-center gap-3">
+<div class="relative w-10 h-10 rounded-full overflow-hidden border border-outline-variant/15">
+<img alt="Carlos Ruiz" class="w-full h-full object-cover" data-alt="Close up portrait of a middle-aged male gardener with a friendly smile, wearing a green work shirt in a sunlit garden." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAdp0BIVOiNeORrcTIZ6MYlH0fbPFY_tw5fsNMQVthb9IyKZEkPqJStJNHh-51TkB0c5L1zdNHdoVAN7ftBtCaeeQLXn-iC3szgsOWzbyBYWtNGclQuDoOwCn8A02xJJqWQghqYE8oik9zvHIgAUNzSDMWCGwVYaeOzALJUGpA6Lubw9-EqBaosDly3oWX-xzXvSeHNU8rLzFg-w-4mwFKEqq-Wp1LfH3IF8Hemzp17vyk11RkFLnuTu-hIjN9kpDhYSHia18a04ZOa"/>
+</div>
+<div>
+<h1 class="font-headline font-bold text-lg tracking-tight leading-none text-primary">Carlos Ruiz</h1>
+<span class="text-[10px] font-label uppercase tracking-widest text-secondary font-semibold">Gardener</span>
+</div>
+</div>
+</div>
+<div class="flex items-center gap-2">
+<button class="material-symbols-outlined text-primary p-2 hover:bg-surface-container-highest/50 rounded-full transition-colors" data-icon="search">search</button>
+<button class="material-symbols-outlined text-primary p-2 hover:bg-surface-container-highest/50 rounded-full transition-colors" data-icon="more_vert">more_vert</button>
+</div>
+</header>
+<!-- Chat Canvas -->
+<main class="flex-1 mt-20 mb-24 px-6 space-y-8 overflow-y-auto">
+<!-- Date Marker -->
+<div class="flex justify-center">
+<span class="text-[10px] font-label uppercase tracking-widest text-outline bg-surface-container-low px-3 py-1 rounded-full">Today</span>
+</div>
+<!-- Incoming Message: Text -->
+<div class="flex flex-col items-start max-w-[85%]">
+<div class="bg-surface-container-highest text-on-surface p-5 rounded-tr-3xl rounded-br-3xl rounded-bl-3xl message-shadow">
+<p class="font-body text-sm leading-relaxed">Hi! I've finished the lawn mowing at Villa Hortensia. I noticed the irrigation system has a small leak.</p>
+<div class="mt-2 text-[10px] text-outline text-right font-label">10:15 AM</div>
+</div>
+</div>
+<!-- Incoming Message: Request with Buttons -->
+<div class="flex flex-col items-start max-w-[85%]">
+<div class="bg-surface-container-highest text-on-surface p-0 rounded-tr-3xl rounded-br-3xl rounded-bl-3xl message-shadow overflow-hidden">
+<div class="p-5">
+<p class="font-body text-sm leading-relaxed font-medium">Shall I fix the irrigation leak now? It will cost 25€ extra.</p>
+</div>
+<div class="flex border-t border-outline-variant/15">
+<button class="flex-1 py-4 text-[11px] font-headline font-extrabold uppercase tracking-widest text-error hover:bg-surface-container-low transition-colors">NO, NOT NOW</button>
+<button class="flex-1 py-4 text-[11px] font-headline font-extrabold uppercase tracking-widest text-primary border-l border-outline-variant/15 hover:bg-surface-container-low transition-colors">YES, PROCEED</button>
+</div>
+</div>
+<div class="mt-2 px-1 text-[10px] text-outline font-label">10:16 AM</div>
+</div>
+<!-- Outgoing Message: Response -->
+<div class="flex flex-col items-end w-full">
+<div class="max-w-[85%] bg-gradient-to-br from-primary to-primary-container text-white p-5 rounded-tl-3xl rounded-br-3xl rounded-bl-3xl message-shadow">
+<p class="font-body text-sm leading-relaxed">Yes, please fix it.</p>
+<div class="mt-2 flex items-center justify-end gap-1">
+<span class="text-[10px] text-primary-fixed/70 font-label">10:18 AM</span>
+<span class="material-symbols-outlined text-[14px] text-primary-fixed" style="font-variation-settings: 'FILL' 1;">done_all</span>
+</div>
+</div>
+</div>
+<!-- Incoming Message: Image -->
+<div class="flex flex-col items-start max-w-[85%]">
+<div class="bg-surface-container-highest p-2 rounded-tr-3xl rounded-br-3xl rounded-bl-3xl message-shadow">
+<div class="rounded-2xl overflow-hidden aspect-video relative">
+<img alt="Irrigation Leak" class="w-full h-full object-cover" data-alt="Detailed view of a green garden landscape with a subtle water leak from a black irrigation pipe among vibrant flowering bushes." src="https://lh3.googleusercontent.com/aida-public/AB6AXuD5m8TyXA0wg5MAHluU5mkH6gi1f4Ski2eaMZY8PgsBWPnI5ajifciQf3MiLGFNR19dUhfFtil3JsqbmD128GzzdqLtt8lIbK6agRY55XgVZOIffH1LPBfuZL3MkfcYnzaC2M2NICX2k_6k03nNCLGvwRL70KcYukz4H3kUHIGv95Ds9Xx-yFRXTx0jlLnPj3Zmaqh2qisWSfXX62eghOwkmXCilnGV1jW7jINm8nR6lnNHlVxWw7Zx7A9P5Vzw-XYhDX61KULfwcpb"/>
+<div class="absolute bottom-3 left-3 bg-primary/80 backdrop-blur-md px-3 py-1.5 rounded-full flex items-center gap-2">
+<span class="material-symbols-outlined text-white text-sm" style="font-variation-settings: 'FILL' 1;">image</span>
+<span class="text-white text-[10px] font-label font-medium uppercase tracking-tight">Leak_Detail_01.jpg</span>
+</div>
+</div>
+<div class="mt-2 px-3 pb-2 flex justify-between items-center">
+<span class="text-[10px] text-outline font-label">Irrigation assessment</span>
+<span class="text-[10px] text-outline font-label">10:20 AM</span>
+</div>
+</div>
+</div>
+</main>
+<!-- Bottom Input Area -->
+<footer class="fixed bottom-0 w-full z-50 p-4 bg-surface/90 backdrop-blur-2xl">
+<div class="max-w-4xl mx-auto flex items-end gap-3">
+<div class="flex-1 flex items-center bg-surface-container-high rounded-[2rem] px-4 py-2 min-h-[56px] border border-outline-variant/10">
+<button class="material-symbols-outlined text-outline p-2 hover:bg-surface-container-highest rounded-full transition-colors" data-icon="add">add</button>
+<input class="flex-1 bg-transparent border-none focus:ring-0 text-sm font-body text-on-surface placeholder:text-outline/60 px-2" placeholder="Type a message..." type="text"/>
+<button class="material-symbols-outlined text-outline p-2 hover:bg-surface-container-highest rounded-full transition-colors" data-icon="photo_camera">photo_camera</button>
+</div>
+<button class="w-14 h-14 rounded-full bg-secondary-container text-on-secondary-container flex items-center justify-center shadow-lg active:scale-95 duration-200 transition-all" title="Request Approval">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">fact_check</span>
+</button><button class="w-14 h-14 rounded-full bg-gradient-to-br from-primary to-primary-container flex items-center justify-center text-white shadow-lg active:scale-95 duration-200">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">send</span>
+</button>
+</div>
+</footer>
+<!-- Task FAB (Contextual for Chat Task Tracking) -->
+<button class="fixed right-6 bottom-24 bg-tertiary-container text-on-tertiary-container p-4 rounded-2xl shadow-xl flex items-center justify-center transition-transform active:scale-95 z-40">
+<span class="material-symbols-outlined">assignment_add</span>
+</button>
+</body></html>

@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&amp;family=Work+Sans:wght@300;400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-dim": "#dddad1",
+                        "on-primary": "#ffffff",
+                        "on-surface": "#1c1c17",
+                        "surface": "#fcf9f0",
+                        "surface-tint": "#47673a",
+                        "outline": "#73796e",
+                        "on-secondary-fixed": "#121f01",
+                        "on-error-container": "#93000a",
+                        "on-primary-fixed": "#052101",
+                        "primary-fixed": "#c8edb5",
+                        "tertiary-container": "#5c3d29",
+                        "secondary": "#53643b",
+                        "error-container": "#ffdad6",
+                        "surface-container": "#f1eee5",
+                        "on-background": "#1c1c17",
+                        "secondary-container": "#d6eab6",
+                        "inverse-on-surface": "#f4f1e8",
+                        "secondary-fixed-dim": "#bacd9c",
+                        "background": "#fcf9f0",
+                        "surface-container-lowest": "#ffffff",
+                        "surface-container-highest": "#e5e2da",
+                        "error": "#ba1a1a",
+                        "surface-variant": "#e5e2da",
+                        "on-tertiary-container": "#d4a88e",
+                        "tertiary-fixed-dim": "#eabda2",
+                        "outline-variant": "#c3c8bc",
+                        "surface-container-low": "#f6f3ea",
+                        "inverse-primary": "#add19b",
+                        "surface-bright": "#fcf9f0",
+                        "on-surface-variant": "#43483f",
+                        "inverse-surface": "#31312b",
+                        "primary-fixed-dim": "#add19b",
+                        "on-secondary-fixed-variant": "#3c4c26",
+                        "tertiary": "#432715",
+                        "on-tertiary": "#ffffff",
+                        "on-secondary": "#ffffff",
+                        "on-primary-container": "#97bb87",
+                        "primary-container": "#2d4b22",
+                        "secondary-fixed": "#d6eab6",
+                        "on-error": "#ffffff",
+                        "on-secondary-container": "#596a41",
+                        "surface-container-high": "#ebe8df",
+                        "on-primary-fixed-variant": "#304e25",
+                        "primary": "#17340e",
+                        "on-tertiary-fixed-variant": "#5f402b",
+                        "on-tertiary-fixed": "#2d1505",
+                        "tertiary-fixed": "#ffdbc7"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "fontFamily": {
+                        "headline": ["Manrope", "sans-serif"],
+                        "body": ["Work Sans", "sans-serif"],
+                        "label": ["Work Sans", "sans-serif"]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .primary-gradient {
+            background: linear-gradient(135deg, #17340e 0%, #2d4b22 100%);
+        }
+        .glass-header {
+            background: rgba(252, 249, 240, 0.8);
+            backdrop-filter: blur(20px);
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+</head>
+<body class="bg-surface text-on-surface font-body selection:bg-secondary-container">
+<!-- TopAppBar -->
+<nav class="fixed top-0 w-full z-50 glass-header flex items-center justify-between px-6 py-4 w-full">
+<div class="flex items-center gap-4">
+<button class="transition-all duration-300 active:scale-95 hover:bg-stone-200/50 dark:hover:bg-stone-800/50 rounded-full p-2">
+<span class="material-symbols-outlined text-[#17340e] dark:text-[#fcf9f0]" data-icon="arrow_back">arrow_back</span>
+</button>
+<h1 class="font-headline font-bold text-xl tracking-tight text-[#17340e] dark:text-[#fcf9f0]">Visit Details</h1>
+</div>
+<button class="transition-all duration-300 active:scale-95 hover:bg-stone-200/50 dark:hover:bg-stone-800/50 rounded-full p-2">
+<span class="material-symbols-outlined text-[#17340e] dark:text-[#fcf9f0]" data-icon="more_vert">more_vert</span>
+</button>
+</nav>
+<main class="pt-24 pb-32 px-4 max-w-xl mx-auto space-y-6">
+<!-- Client Card (Top 20%) -->
+<section class="bg-surface-container-low rounded-xl relative overflow-hidden p-4">
+<div class="flex justify-between items-start">
+<div class="">
+<span class="text-xs font-label uppercase tracking-widest text-on-surface-variant opacity-70">CURRENT CLIENT</span>
+<h2 class="font-headline font-extrabold text-primary text-2xl leading-none">Villa Hortensia</h2>
+<p class="text-on-surface-variant font-medium text-sm">122 Calle de las Rosas, Madrid</p>
+</div>
+<a class="bg-primary-container text-on-primary-container transition-all active:scale-90 shadow-sm p-3 rounded-lg" href="tel:+34912345678">
+<span class="material-symbols-outlined text-2xl" data-icon="call">call</span>
+</a>
+</div>
+<!-- Decorative garden element -->
+<div class="absolute -bottom-6 -right-6 opacity-10">
+<span class="material-symbols-outlined text-9xl text-primary" data-icon="park">park</span>
+</div>
+</section>
+<!-- Timer & Controls (Mid-Top 20%) -->
+<section class="bg-surface-container-highest rounded-xl p-6 space-y-6">
+<div class="grid grid-cols-2 gap-4">
+<div class="space-y-1">
+<span class="text-[10px] font-label uppercase tracking-widest text-on-surface-variant">ENTRY TIME</span>
+<div class="flex items-center gap-2 text-primary">
+<span class="material-symbols-outlined text-lg" data-icon="login">login</span>
+<span class="font-headline font-bold">08:30 AM</span>
+</div>
+</div>
+<div class="space-y-1 text-right">
+<span class="text-[10px] font-label uppercase tracking-widest text-on-surface-variant">LIVE DURATION</span>
+<div class="font-headline font-extrabold text-2xl tracking-tighter text-primary">01:45:12</div>
+</div>
+</div>
+<div class="grid grid-cols-2 gap-3">
+<button class="primary-gradient text-on-primary flex items-center justify-center gap-2 py-4 px-2 rounded-xl font-headline font-bold text-sm tracking-tight shadow-lg transition-all active:scale-95">
+<span class="material-symbols-outlined" data-icon="qr_code_scanner">qr_code_scanner</span>
+                    SCAN EXIT QR
+                </button>
+<button class="bg-surface-container-lowest border border-outline-variant/30 text-primary flex items-center justify-center gap-2 py-4 px-2 rounded-xl font-headline font-bold text-sm tracking-tight transition-all active:scale-95">
+<span class="material-symbols-outlined" data-icon="edit_note">edit_note</span>
+                    MANUAL EXIT
+                </button>
+</div>
+</section>
+<!-- Activity Section -->
+<section class="space-y-4">
+<h3 class="font-headline font-bold text-lg px-2">Work Activity</h3>
+<!-- Photo Gallery & Add Photo -->
+<div class="grid grid-cols-4 gap-3">
+<div class="aspect-square rounded-xl overflow-hidden bg-surface-container shadow-sm">
+<img class="w-full h-full object-cover" data-alt="close up of freshly pruned hedge with sharp clean edges in a bright morning sunlight" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDT0QFnhcgFbifQ1ac2dX2fs4adcuevfo1tH3K8Y03KBnWOjQMNPBxTGDUgZALtDApHJvXt0-AD8dwtfJXOFeetSpjqj7viar3_1bCCszf9iNDJv9N2eDoa4htJ6lgPgWRUkBmwaDgZtd_rGu7dt5wgQJkfRa3iv88QuMzxBL5jp1F5bUhT8mzB3N3DjDBI8IuF2J68xghL1uKYTnk9rfyJuXUmPLBcpkepzs9-xHle900OvIgumKOPRnmXZAB1lPoCaeneSdrMHOFH"/>
+</div>
+<div class="aspect-square rounded-xl overflow-hidden bg-surface-container shadow-sm">
+<img class="w-full h-full object-cover" data-alt="vibrant flower bed with mulch and colorful perennials in a well-maintained spanish garden" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAvFNylYhkK_DmA3Wn4cyKxSkad2Fd26h4SfGScgTP55G_2nBALgzp637rGDhIk2_M2ZeWg5H2pzu0aqvX27pMVXqI2Q5MxwIzGEbloAMEy6HtdvWEgnsHzyQm_PTTFW7yOWDjOZZt33XHPsAiYcYzS438wQI35B65OMVcNWnx3-0fgt1zl4WEc3kc-zUoMd1OrPa_aMotXqmS69DOk0im9RUYt0gCL0xabEMFGGgdS1sG2k307Hdmdr0WAXWbtW-ijVESPpBg00H7Z"/>
+</div>
+<button class="col-span-2 flex flex-col items-center justify-center gap-1 bg-secondary-container text-on-secondary-container rounded-xl py-6 transition-all active:scale-95 border-2 border-dashed border-secondary/20">
+<span class="material-symbols-outlined text-4xl" data-icon="photo_camera" style="font-variation-settings: 'FILL' 1;">photo_camera</span>
+<span class="font-headline font-bold text-xs uppercase tracking-tighter">ADD PHOTO</span>
+</button>
+</div>
+<!-- Notes & Dictate -->
+<div class="flex gap-3 items-stretch">
+<div class="flex-grow relative">
+<textarea class="w-full h-full min-h-[120px] bg-surface-container-highest border-none rounded-xl p-4 font-body text-on-surface placeholder:text-outline focus:ring-2 focus:ring-primary/20 transition-all" placeholder="Describe maintenance tasks..."></textarea>
+</div>
+<button class="w-24 primary-gradient text-on-primary flex flex-col items-center justify-center gap-2 rounded-xl transition-all active:scale-95 shadow-md">
+<span class="material-symbols-outlined text-4xl" data-icon="mic" style="font-variation-settings: 'FILL' 1;">mic</span>
+<span class="font-headline font-bold text-xs uppercase tracking-tighter">DICTATE</span>
+</button>
+</div>
+</section>
+<!-- Task Checklist Bento -->
+<section class="bg-tertiary-fixed/20 rounded-xl p-5 border border-tertiary-fixed-dim/30">
+<div class="flex items-center justify-between mb-4">
+<h4 class="font-headline font-bold text-tertiary">Quick Checklist</h4>
+<span class="text-[10px] font-label font-bold text-tertiary-container bg-tertiary-fixed-dim/40 px-2 py-0.5 rounded-full">3/5 DONE</span>
+</div>
+<div class="grid grid-cols-1 gap-2">
+<div class="flex items-center gap-3 bg-surface-container-lowest/60 p-3 rounded-lg">
+<span class="material-symbols-outlined text-primary" data-icon="check_circle" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+<span class="text-sm font-medium">Lawn Mowing</span>
+</div>
+<div class="flex items-center gap-3 bg-surface-container-lowest/60 p-3 rounded-lg">
+<span class="material-symbols-outlined text-primary" data-icon="check_circle" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+<span class="text-sm font-medium">Rose Bush Pruning</span>
+</div>
+<div class="flex items-center gap-3 bg-surface-container-lowest/40 p-3 rounded-lg border border-dashed border-tertiary/20">
+<span class="material-symbols-outlined text-outline" data-icon="radio_button_unchecked">radio_button_unchecked</span>
+<span class="text-sm font-medium opacity-60">Irrigation Check</span>
+</div>
+</div>
+</section>
+</main>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 w-full z-50 rounded-t-[2rem] bg-[#fcf9f0] dark:bg-stone-900 border-t border-[#e5e2da]/15 shadow-[0_-4px_24px_-4px_rgba(28,28,23,0.06)] flex justify-around items-center px-4 pb-6 pt-3 w-full">
+<a class="flex flex-col items-center justify-center bg-[#e5e2da] dark:bg-stone-800 text-[#17340e] dark:text-white rounded-[1.25rem] px-5 py-2 transition-transform duration-200 ease-out active:scale-90" href="#">
+<span class="material-symbols-outlined" data-icon="calendar_today">calendar_today</span>
+<span class="font-work-sans text-[11px] uppercase tracking-wider font-semibold">Schedule</span>
+</a>
+<a class="flex flex-col items-center justify-center text-[#2d4b22] dark:text-stone-400 px-5 py-2 hover:text-[#17340e] dark:hover:text-stone-200 transition-transform duration-200 ease-out active:scale-90" href="#">
+<span class="material-symbols-outlined" data-icon="park">park</span>
+<span class="font-work-sans text-[11px] uppercase tracking-wider font-semibold">Garden</span>
+</a>
+<a class="flex flex-col items-center justify-center text-[#2d4b22] dark:text-stone-400 px-5 py-2 hover:text-[#17340e] dark:hover:text-stone-200 transition-transform duration-200 ease-out active:scale-90" href="#">
+<span class="material-symbols-outlined" data-icon="group">group</span>
+<span class="font-work-sans text-[11px] uppercase tracking-wider font-semibold">Clients</span>
+</a>
+<a class="flex flex-col items-center justify-center text-[#2d4b22] dark:text-stone-400 px-5 py-2 hover:text-[#17340e] dark:hover:text-stone-200 transition-transform duration-200 ease-out active:scale-90" href="#">
+<span class="material-symbols-outlined" data-icon="person">person</span>
+<span class="font-work-sans text-[11px] uppercase tracking-wider font-semibold">Account</span>
+</a>
+</nav>
+</body></html>

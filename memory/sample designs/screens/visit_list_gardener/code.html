@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Gardener Visit History</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;700;800&amp;family=Work+Sans:wght@300;400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "tertiary-container": "#5c3d29",
+                        "surface-container-highest": "#e5e2da",
+                        "primary": "#17340e",
+                        "primary-fixed": "#c8edb5",
+                        "surface-bright": "#fcf9f0",
+                        "tertiary": "#432715",
+                        "on-error-container": "#93000a",
+                        "outline": "#73796e",
+                        "inverse-surface": "#31312b",
+                        "error": "#ba1a1a",
+                        "on-surface": "#1c1c17",
+                        "on-secondary-fixed": "#121f01",
+                        "on-tertiary": "#ffffff",
+                        "surface": "#fcf9f0",
+                        "surface-variant": "#e5e2da",
+                        "on-background": "#1c1c17",
+                        "on-tertiary-fixed-variant": "#5f402b",
+                        "error-container": "#ffdad6",
+                        "surface-container-low": "#f6f3ea",
+                        "surface-container-high": "#ebe8df",
+                        "secondary-fixed-dim": "#bacd9c",
+                        "outline-variant": "#c3c8bc",
+                        "secondary-fixed": "#d6eab6",
+                        "on-secondary-container": "#596a41",
+                        "inverse-on-surface": "#f4f1e8",
+                        "on-secondary": "#ffffff",
+                        "inverse-primary": "#add19b",
+                        "surface-container-lowest": "#ffffff",
+                        "primary-container": "#2d4b22",
+                        "on-primary-fixed": "#052101",
+                        "tertiary-fixed-dim": "#eabda2",
+                        "on-tertiary-container": "#d4a88e",
+                        "on-secondary-fixed-variant": "#3c4c26",
+                        "surface-dim": "#dddad1",
+                        "on-primary": "#ffffff",
+                        "primary-fixed-dim": "#add19b",
+                        "surface-container": "#f1eee5",
+                        "secondary": "#53643b",
+                        "on-tertiary-fixed": "#2d1505",
+                        "on-primary-fixed-variant": "#304e25",
+                        "surface-tint": "#47673a",
+                        "secondary-container": "#d6eab6",
+                        "background": "#fcf9f0",
+                        "on-surface-variant": "#43483f",
+                        "tertiary-fixed": "#ffdbc7",
+                        "on-error": "#ffffff",
+                        "on-primary-container": "#97bb87"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "fontFamily": {
+                        "headline": ["Manrope"],
+                        "body": ["Work Sans"],
+                        "label": ["Work Sans"]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        body { font-family: 'Work Sans', sans-serif; }
+        h1, h2, h3, h4 { font-family: 'Manrope', sans-serif; }
+    </style>
+<style>
+        body {
+            min-height: max(884px, 100dvh);
+        }
+    </style>
+</head>
+<body class="bg-surface text-on-surface min-h-screen pb-32">
+<!-- TopAppBar -->
+<header class="fixed top-0 w-full z-50 bg-[#fcf9f0]/80 dark:bg-stone-950/80 backdrop-blur-md shadow-sm dark:shadow-none">
+<div class="flex items-center justify-between px-6 py-4 w-full">
+<div class="flex items-center gap-4">
+<button class="hover:bg-[#e5e2da]/50 dark:hover:bg-stone-800/50 transition-colors p-2 rounded-full active:scale-95 duration-200">
+<span class="material-symbols-outlined text-[#17340e] dark:text-[#fcf9f0]" data-icon="arrow_back">arrow_back</span>
+</button>
+<h1 class="font-manrope font-bold text-2xl tracking-tight text-[#17340e] dark:text-[#fcf9f0]">Visit History</h1>
+</div>
+<button class="hover:bg-[#e5e2da]/50 dark:hover:bg-stone-800/50 transition-colors p-2 rounded-full active:scale-95 duration-200">
+<span class="material-symbols-outlined text-[#17340e] dark:text-[#fcf9f0]" data-icon="more_vert">more_vert</span>
+</button>
+</div>
+</header>
+<main class="pt-24 px-6 max-w-5xl mx-auto">
+<!-- Visit Feed -->
+<div class="space-y-6">
+<!-- Dashboard Summary / Hero Section -->
+<section class="mb-8">
+<div class="relative overflow-hidden rounded-xl bg-primary-container p-6 text-white shadow-md">
+<div class="relative z-10 flex items-center justify-between">
+<div class="flex gap-8">
+<div>
+<p class="text-2xl font-headline font-extrabold">24</p>
+<p class="text-[10px] font-label font-bold tracking-wider opacity-70 uppercase">Visites fetes</p>
+</div>
+<div class="border-l border-white/20 pl-8">
+<p class="text-2xl font-headline font-extrabold">38.5h</p>
+<p class="text-[10px] font-label font-bold tracking-wider opacity-70 uppercase">Hores Treballades</p>
+</div>
+</div>
+<div class="opacity-20">
+<span class="material-symbols-outlined text-4xl" data-icon="query_stats">query_stats</span>
+</div>
+</div>
+<div class="absolute -right-4 -bottom-4 opacity-5 scale-125">
+<span class="material-symbols-outlined text-[6rem]" data-icon="history">history</span>
+</div>
+</div>
+</section><div class="mb-8 relative">
+<div class="relative flex items-center">
+<span class="material-symbols-outlined absolute left-4 text-outline" data-icon="search">search</span>
+<input class="w-full pl-12 pr-4 py-4 bg-surface-container-low border-none rounded-xl focus:ring-2 focus:ring-primary/20 focus:bg-surface-container transition-all text-on-surface placeholder:text-outline/60 font-body text-sm shadow-sm" placeholder="Search visits..." type="text"/>
+</div>
+</div>
+<!-- Visit Entry 1 -->
+<article class="group bg-surface-container-lowest rounded-xl p-5 transition-all hover:bg-white active:scale-[0.98] cursor-pointer shadow-[0_4px_20px_-8px_rgba(28,28,23,0.08)] border border-transparent hover:border-outline-variant/30 flex items-center gap-4">
+<div class="flex-1 space-y-3">
+<div class="flex items-center gap-4">
+<span class="bg-secondary-container text-on-secondary-container text-[11px] font-label font-bold px-3 py-1 rounded-full">OCT 12, 2026</span>
+<div class="flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#e8f5e9] text-[#2e7d32]">
+<span class="material-symbols-outlined text-sm" style="font-variation-settings: 'FILL' 1;">verified</span>
+<span class="text-[10px] font-bold tracking-widest uppercase">VERIFIED</span>
+</div>
+</div>
+<div>
+<h3 class="text-2xl font-headline font-bold text-primary">Villa Hortensia</h3>
+<div class="flex items-center gap-4 text-on-surface-variant text-sm mt-1">
+<span class="flex items-center gap-1">
+<span class="material-symbols-outlined text-base" data-icon="schedule">schedule</span>
+                            09:00 - 10:30
+                        </span>
+<span class="flex items-center gap-1 text-tertiary">
+<span class="material-symbols-outlined text-base" data-icon="photo_library">photo_library</span>
+                            4 Photos
+                        </span>
+</div>
+</div>
+<p class="text-on-surface-variant font-body text-sm leading-relaxed max-w-2xl line-clamp-2">
+                    Mowing the formal lawn areas, meticulous weeding of the rose garden, checking the smart irrigation system calibration, and light pruning of the climbing jasmine.
+                </p>
+</div>
+<div class="flex items-center text-outline/30 group-hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-xl" data-icon="arrow_forward_ios">arrow_forward_ios</span>
+</div>
+</article>
+<!-- Visit Entry 2 -->
+<article class="group bg-surface-container-low rounded-xl p-5 transition-all hover:bg-surface-container active:scale-[0.98] cursor-pointer shadow-sm flex items-center gap-4">
+<div class="flex-1 space-y-3">
+<div class="flex items-center gap-4">
+<span class="bg-secondary-container text-on-secondary-container text-[11px] font-label font-bold px-3 py-1 rounded-full">OCT 10, 2026</span>
+<div class="flex items-center gap-1.5 px-3 py-1 rounded-full bg-surface-variant text-on-surface-variant">
+<span class="material-symbols-outlined text-sm" data-icon="edit_note">edit_note</span>
+<span class="text-[10px] font-bold tracking-widest uppercase">MANUAL</span>
+</div>
+</div>
+<div>
+<h3 class="text-2xl font-headline font-bold text-primary">Highland Estate</h3>
+<div class="flex items-center gap-4 text-on-surface-variant text-sm mt-1">
+<span class="flex items-center gap-1">
+<span class="material-symbols-outlined text-base" data-icon="schedule">schedule</span>
+                            13:00 - 16:45
+                        </span>
+<span class="flex items-center gap-1 opacity-50">
+<span class="material-symbols-outlined text-base" data-icon="no_photography">no_photography</span>
+                            No Photos
+                        </span>
+</div>
+</div>
+<p class="text-on-surface-variant font-body text-sm leading-relaxed max-w-2xl line-clamp-2">
+                    Seasonal tree trimming in the orchard. Applied organic fertilizer to the citrus groves and inspected the mulch levels in the southern slope.
+                </p>
+</div>
+<div class="flex items-center text-outline/30 group-hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-xl" data-icon="arrow_forward_ios">arrow_forward_ios</span>
+</div>
+</article>
+<!-- Visit Entry 3 -->
+<article class="group bg-surface-container-lowest rounded-xl p-5 transition-all hover:bg-white active:scale-[0.98] cursor-pointer shadow-[0_4px_20px_-8px_rgba(28,28,23,0.08)] border border-transparent hover:border-outline-variant/30 flex items-center gap-4">
+<div class="flex-1 space-y-3">
+<div class="flex items-center gap-4">
+<span class="bg-secondary-container text-on-secondary-container text-[11px] font-label font-bold px-3 py-1 rounded-full">OCT 08, 2026</span>
+<div class="flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#e8f5e9] text-[#2e7d32]">
+<span class="material-symbols-outlined text-sm" style="font-variation-settings: 'FILL' 1;">verified</span>
+<span class="text-[10px] font-bold tracking-widest uppercase">VERIFIED</span>
+</div>
+</div>
+<div>
+<h3 class="text-2xl font-headline font-bold text-primary">Secret Garden Cafe</h3>
+<div class="flex items-center gap-4 text-on-surface-variant text-sm mt-1">
+<span class="flex items-center gap-1">
+<span class="material-symbols-outlined text-base" data-icon="schedule">schedule</span>
+                            07:30 - 08:30
+                        </span>
+<span class="flex items-center gap-1 text-tertiary">
+<span class="material-symbols-outlined text-base" data-icon="photo_library">photo_library</span>
+                            2 Photos
+                        </span>
+</div>
+</div>
+<p class="text-on-surface-variant font-body text-sm leading-relaxed max-w-2xl line-clamp-2">
+                    Potted plant maintenance and exterior landscape sweeping before business hours. Deadheading lavender and sage containers.
+                </p>
+</div>
+<div class="flex items-center text-outline/30 group-hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-xl" data-icon="arrow_forward_ios">arrow_forward_ios</span>
+</div>
+</article>
+</div>
+<!-- Load More Section -->
+<div class="mt-12 flex justify-center pb-8">
+<button class="group flex items-center gap-2 text-primary font-label font-bold text-sm hover:opacity-70 transition-opacity">
+            VIEW OLDER VISITS
+            <span class="material-symbols-outlined group-hover:translate-y-1 duration-200" data-icon="expand_more">expand_more</span>
+</button>
+</div>
+</main>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 left-0 w-full z-50 bg-[#fcf9f0] dark:bg-stone-950 shadow-[0_-4px_24px_-4px_rgba(28,28,23,0.06)] rounded-t-3xl pt-3 pb-6 px-4 flex justify-around items-center">
+<!-- Schedule -->
+<a class="flex flex-col items-center justify-center text-stone-500 dark:text-stone-400 px-5 py-2 hover:text-[#17340e] dark:hover:text-[#fcf9f0] active:translate-y-0.5 duration-150" href="#">
+<span class="material-symbols-outlined mb-1" data-icon="calendar_today">calendar_today</span>
+<span class="font-manrope font-medium text-[11px] uppercase tracking-wider">Schedule</span>
+</a>
+<!-- History (Active) -->
+<a class="flex flex-col items-center justify-center bg-gradient-to-br from-[#17340e] to-[#2d4b22] text-white rounded-xl px-5 py-2 active:translate-y-0.5 duration-150" href="#">
+<span class="material-symbols-outlined mb-1" data-icon="history" style="font-variation-settings: 'FILL' 1;">history</span>
+<span class="font-manrope font-medium text-[11px] uppercase tracking-wider">History</span>
+</a>
+<!-- Clients -->
+<a class="flex flex-col items-center justify-center text-stone-500 dark:text-stone-400 px-5 py-2 hover:text-[#17340e] dark:hover:text-[#fcf9f0] active:translate-y-0.5 duration-150" href="#">
+<span class="material-symbols-outlined mb-1" data-icon="group">group</span>
+<span class="font-manrope font-medium text-[11px] uppercase tracking-wider">Clients</span>
+</a>
+<!-- Profile -->
+<a class="flex flex-col items-center justify-center text-stone-500 dark:text-stone-400 px-5 py-2 hover:text-[#17340e] dark:hover:text-[#fcf9f0] active:translate-y-0.5 duration-150" href="#">
+<span class="material-symbols-outlined mb-1" data-icon="person">person</span>
+<span class="font-manrope font-medium text-[11px] uppercase tracking-wider">Profile</span>
+</a>
+</nav>
+</body></html>
