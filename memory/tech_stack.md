@@ -28,11 +28,14 @@
 - **Tema:** next-themes (dark mode via system)
 - **Tipografía:** Manrope + Work Sans via next/font/google
 
-## Backend (v1: NO implementado)
+## Backend — Supabase
 
-- **Datos locales:** SQLite en mobile, datos mock en web
-- **Futuro:** Supabase o Java Spring + BBDD relacional
-- **Sincronización remota:** Pendiente para v2
+- **Base de datos:** PostgreSQL en Supabase
+- **Auth:** Email + Password (publishable key: `sb_publishable_...`)
+- **Storage:** Bucket `visit-photos`
+- **RLS:** Row Level Security por rol
+- **Schema:** `supabase/schema.sql`
+- **Fallback mobile:** SQLite local (offline)
 
 ## Diseño visual
 

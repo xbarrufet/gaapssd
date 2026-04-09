@@ -1,7 +1,6 @@
 "use client";
 
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import { ArrowLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -14,16 +13,9 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { createUser } from "../actions";
 
 export default function NewUserPage() {
-  const router = useRouter();
-
-  function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
-    e.preventDefault();
-    // TODO: integrate with backend
-    router.push("/dashboard/users");
-  }
-
   return (
     <div className="space-y-6">
       <div className="flex items-center gap-4">
@@ -47,16 +39,17 @@ export default function NewUserPage() {
           <CardTitle>Datos del usuario</CardTitle>
         </CardHeader>
         <CardContent>
-          <form onSubmit={handleSubmit} className="space-y-4">
+          <form action={createUser} className="space-y-4">
             <div className="grid gap-4 sm:grid-cols-2">
               <div className="space-y-2">
                 <Label htmlFor="name">Nombre</Label>
-                <Input id="name" placeholder="Nombre completo" required />
+                <Input id="name" name="name" placeholder="Nombre completo" required />
               </div>
               <div className="space-y-2">
                 <Label htmlFor="email">Email</Label>
                 <Input
                   id="email"
+                  name="email"
                   type="email"
                   placeholder="correo@ejemplo.es"
                   required
@@ -64,8 +57,19 @@ export default function NewUserPage() {
               </div>
             </div>
             <div className="space-y-2">
+              <Label htmlFor="password">Contraseña</Label>
+              <Input
+                id="password"
+                name="password"
+                type="password"
+                placeholder="Mínimo 6 caracteres"
+                required
+                minLength={6}
+              />
+            </div>
+            <div className="space-y-2">
               <Label htmlFor="role">Rol</Label>
-              <Select required>
+              <Select name="role" required>
                 <SelectTrigger>
                   <SelectValue placeholder="Seleccionar rol" />
                 </SelectTrigger>

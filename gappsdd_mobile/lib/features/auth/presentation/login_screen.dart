@@ -29,10 +29,38 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     super.dispose();
   }
 
-  void _signIn({required bool asClient}) {
-    final role = asClient ? UserRole.client : UserRole.gardener;
-    ref.read(authProvider.notifier).signIn(role: role);
-    context.go(asClient ? AppRoutes.clientVisits : AppRoutes.gardenerVisits);
+  bool _loading = false;
+
+  Future<void> _signIn({required bool asClient}) async {
+    final email = _emailController.text.trim();
+    final password = _passwordController.text;
+
+    if (email.isEmpty || password.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Introduce email y contraseña')),
+      );
+      return;
+    }
+
+    setState(() => _loading = true);
+    try {
+      await ref.read(authProvider.notifier).signInWithEmail(
+            email: email,
+            password: password,
+          );
+      if (!mounted) return;
+      final auth = ref.read(authProvider);
+      if (auth != null) {
+        context.go(auth.isClient ? AppRoutes.clientVisits : AppRoutes.gardenerVisits);
+      }
+    } catch (e) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Error: $e')),
+      );
+    } finally {
+      if (mounted) setState(() => _loading = false);
+    }
   }
 
   @override

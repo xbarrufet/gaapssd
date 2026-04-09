@@ -1,18 +1,18 @@
-"use client";
-
 import Link from "next/link";
-import { useRouter, useParams } from "next/navigation";
 import { ArrowLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { sampleGardeners } from "@/lib/sample-data";
+import { getGardener, updateGardener } from "../actions";
 
-export default function EditGardenerPage() {
-  const router = useRouter();
-  const params = useParams();
-  const gardener = sampleGardeners.find((g) => g.id === params.id);
+export default async function EditGardenerPage({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}) {
+  const { id } = await params;
+  const gardener = await getGardener(id);
 
   if (!gardener) {
     return (
@@ -20,10 +20,7 @@ export default function EditGardenerPage() {
     );
   }
 
-  function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
-    e.preventDefault();
-    router.push("/dashboard/gardeners");
-  }
+  const updateWithId = updateGardener.bind(null, id);
 
   return (
     <div className="space-y-6">
@@ -37,7 +34,7 @@ export default function EditGardenerPage() {
           <h1 className="font-heading text-2xl font-bold tracking-tight">
             Editar Jardinero
           </h1>
-          <p className="text-muted-foreground">{gardener.name}</p>
+          <p className="text-muted-foreground">{gardener.display_name}</p>
         </div>
       </div>
 
@@ -46,25 +43,16 @@ export default function EditGardenerPage() {
           <CardTitle>Datos del jardinero</CardTitle>
         </CardHeader>
         <CardContent>
-          <form onSubmit={handleSubmit} className="space-y-4">
+          <form action={updateWithId} className="space-y-4">
             <div className="grid gap-4 sm:grid-cols-2">
               <div className="space-y-2">
                 <Label htmlFor="name">Nombre</Label>
-                <Input id="name" defaultValue={gardener.name} required />
+                <Input id="name" name="name" defaultValue={gardener.display_name} required />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="email">Email</Label>
-                <Input
-                  id="email"
-                  type="email"
-                  defaultValue={gardener.email}
-                  required
-                />
+                <Label htmlFor="phone">Teléfono</Label>
+                <Input id="phone" name="phone" type="tel" defaultValue={gardener.phone ?? ""} />
               </div>
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="phone">Teléfono</Label>
-              <Input id="phone" type="tel" defaultValue={gardener.phone} />
             </div>
             <div className="flex gap-3 pt-4">
               <Button type="submit">Guardar Cambios</Button>

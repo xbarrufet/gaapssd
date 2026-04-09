@@ -1,53 +1,28 @@
-"use client";
-
 import { type ColumnDef } from "@tanstack/react-table";
 import Link from "next/link";
 import { Plus, Pencil } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { DataTable } from "@/components/data-table";
-import { sampleUsers } from "@/lib/sample-data";
-import type { User } from "@/types";
+import { getUsers } from "./actions";
+import { UsersTable } from "./users-table";
 
-const roleLabels: Record<User["role"], string> = {
-  admin: "Admin",
-  gardener: "Jardinero",
-  client: "Cliente",
+const roleLabels: Record<string, string> = {
+  ADMIN: "Admin",
+  GARDENER: "Jardinero",
+  CLIENT: "Cliente",
+  MANAGER: "Gestor",
 };
 
-const roleVariants: Record<User["role"], "default" | "secondary" | "outline"> =
-  {
-    admin: "default",
-    gardener: "secondary",
-    client: "outline",
-  };
+const roleVariants: Record<string, "default" | "secondary" | "outline"> = {
+  ADMIN: "default",
+  GARDENER: "secondary",
+  CLIENT: "outline",
+  MANAGER: "secondary",
+};
 
-const columns: ColumnDef<User>[] = [
-  { accessorKey: "name", header: "Nombre" },
-  { accessorKey: "email", header: "Email" },
-  {
-    accessorKey: "role",
-    header: "Rol",
-    cell: ({ row }) => {
-      const role = row.getValue("role") as User["role"];
-      return <Badge variant={roleVariants[role]}>{roleLabels[role]}</Badge>;
-    },
-  },
-  { accessorKey: "createdAt", header: "Fecha de alta" },
-  {
-    id: "actions",
-    header: "",
-    cell: ({ row }) => (
-      <Link href={`/dashboard/users/${row.original.id}`}>
-        <Button variant="ghost" size="icon">
-          <Pencil className="h-4 w-4" />
-        </Button>
-      </Link>
-    ),
-  },
-];
+export default async function UsersPage() {
+  const users = await getUsers();
 
-export default function UsersPage() {
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
@@ -66,11 +41,7 @@ export default function UsersPage() {
           </Button>
         </Link>
       </div>
-      <DataTable
-        columns={columns}
-        data={sampleUsers}
-        searchPlaceholder="Buscar usuarios..."
-      />
+      <UsersTable users={users} />
     </div>
   );
 }

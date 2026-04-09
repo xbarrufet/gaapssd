@@ -1,19 +1,28 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Users, Flower2, UserCircle, CalendarCheck } from "lucide-react";
+import { createClient } from "@/lib/supabase/server";
 
-const stats = [
-  { title: "Usuarios", value: "24", icon: Users, description: "Registrados" },
-  { title: "Jardineros", value: "8", icon: Flower2, description: "Activos" },
-  { title: "Clientes", value: "16", icon: UserCircle, description: "Activos" },
-  {
-    title: "Visitas",
-    value: "142",
-    icon: CalendarCheck,
-    description: "Este mes",
-  },
-];
+async function getStats() {
+  const supabase = await createClient();
 
-export default function DashboardPage() {
+  const [users, gardeners, clients, visits] = await Promise.all([
+    supabase.from("user_profiles").select("*", { count: "exact", head: true }),
+    supabase.from("gardener_profiles").select("*", { count: "exact", head: true }),
+    supabase.from("client_profiles").select("*", { count: "exact", head: true }),
+    supabase.from("visits").select("*", { count: "exact", head: true }),
+  ]);
+
+  return [
+    { title: "Usuarios", value: String(users.count ?? 0), icon: Users, description: "Registrados" },
+    { title: "Jardineros", value: String(gardeners.count ?? 0), icon: Flower2, description: "Registrados" },
+    { title: "Clientes", value: String(clients.count ?? 0), icon: UserCircle, description: "Registrados" },
+    { title: "Visitas", value: String(visits.count ?? 0), icon: CalendarCheck, description: "Total" },
+  ];
+}
+
+export default async function DashboardPage() {
+  const stats = await getStats();
+
   return (
     <div className="space-y-6">
       <div>

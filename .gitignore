@@ -49,6 +49,10 @@ gappsdd_web/out/
 gappsdd_web/node_modules/
 .env*.local
 
+# Environment variables
+gappsdd_mobile/.env
+*.env.local
+
 # Dependencies
 node_modules/
 

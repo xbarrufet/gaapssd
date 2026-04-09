@@ -58,9 +58,12 @@ GAPP proporciona:
 - **Propósito:** CRUD de usuarios, jardineros y clientes
 - **Estado:** En desarrollo (estructura inicial)
 
-### Backend (v1: NO implementado, datos hardcodeados)
-- **Datos temporales:** Almacenaje local en SQLite (mobile) / datos mock (web)
-- **Estructura futura:** Supabase o Java Spring + BBDD relacional
+### Backend — Supabase
+- **Base de datos:** PostgreSQL en Supabase (schema en `supabase/schema.sql`)
+- **Auth:** Email + Password via Supabase Auth (publishable key system)
+- **Storage:** Bucket `visit-photos` para fotografías de visitas
+- **RLS:** Row Level Security por rol (admin, gardener, client)
+- **Fallback mobile:** SQLite local para uso offline
 
 ### Infraestructura
 - **Compilación:** Gradle (Android), Xcode (iOS), Node.js (Web admin)

@@ -1,34 +1,23 @@
-"use client";
-
 import Link from "next/link";
-import { useRouter, useParams } from "next/navigation";
 import { ArrowLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import { sampleUsers } from "@/lib/sample-data";
+import { getUser, updateUser } from "../actions";
+import { EditUserForm } from "./edit-form";
 
-export default function EditUserPage() {
-  const router = useRouter();
-  const params = useParams();
-  const user = sampleUsers.find((u) => u.id === params.id);
+export default async function EditUserPage({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}) {
+  const { id } = await params;
+  const user = await getUser(id);
 
   if (!user) {
     return <p className="p-6 text-muted-foreground">Usuario no encontrado.</p>;
   }
 
-  function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
-    e.preventDefault();
-    router.push("/dashboard/users");
-  }
+  const updateWithId = updateUser.bind(null, id);
 
   return (
     <div className="space-y-6">
@@ -42,7 +31,7 @@ export default function EditUserPage() {
           <h1 className="font-heading text-2xl font-bold tracking-tight">
             Editar Usuario
           </h1>
-          <p className="text-muted-foreground">{user.name}</p>
+          <p className="text-muted-foreground">{user.display_name}</p>
         </div>
       </div>
 
@@ -51,42 +40,7 @@ export default function EditUserPage() {
           <CardTitle>Datos del usuario</CardTitle>
         </CardHeader>
         <CardContent>
-          <form onSubmit={handleSubmit} className="space-y-4">
-            <div className="grid gap-4 sm:grid-cols-2">
-              <div className="space-y-2">
-                <Label htmlFor="name">Nombre</Label>
-                <Input id="name" defaultValue={user.name} required />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="email">Email</Label>
-                <Input
-                  id="email"
-                  type="email"
-                  defaultValue={user.email}
-                  required
-                />
-              </div>
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="role">Rol</Label>
-              <Select defaultValue={user.role}>
-                <SelectTrigger>
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="admin">Administrador</SelectItem>
-                  <SelectItem value="gardener">Jardinero</SelectItem>
-                  <SelectItem value="client">Cliente</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-            <div className="flex gap-3 pt-4">
-              <Button type="submit">Guardar Cambios</Button>
-              <Link href="/dashboard/users">
-                <Button variant="outline">Cancelar</Button>
-              </Link>
-            </div>
-          </form>
+          <EditUserForm user={user} action={updateWithId} />
         </CardContent>
       </Card>
     </div>

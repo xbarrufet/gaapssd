@@ -35,14 +35,17 @@ export function Topbar() {
       <Separator orientation="vertical" className="mr-2 h-4" />
       <Breadcrumb>
         <BreadcrumbList>
-          {segments.map((segment, index) => {
+          {segments.flatMap((segment, index) => {
             const isLast = index === segments.length - 1;
             const href = "/" + segments.slice(0, index + 1).join("/");
             const label = routeLabels[segment] ?? segment;
 
-            return (
+            const items = [];
+            if (index > 0) {
+              items.push(<BreadcrumbSeparator key={`sep-${href}`} />);
+            }
+            items.push(
               <BreadcrumbItem key={href}>
-                {index > 0 && <BreadcrumbSeparator />}
                 {isLast ? (
                   <BreadcrumbPage>{label}</BreadcrumbPage>
                 ) : (
@@ -50,6 +53,7 @@ export function Topbar() {
                 )}
               </BreadcrumbItem>
             );
+            return items;
           })}
         </BreadcrumbList>
       </Breadcrumb>

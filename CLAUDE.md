@@ -117,6 +117,26 @@ npm run lint          # ESLint
 
 ---
 
+## Backend: Supabase
+
+- **Project ID:** `vepznvgqkoqldtlyzbxd`
+- **Auth:** Email + Password via Supabase Auth (new publishable key system)
+- **DB:** PostgreSQL with RLS (Row Level Security)
+- **Storage:** `visit-photos` bucket for visit photography
+- **Schema:** `supabase/schema.sql` (run in SQL Editor to initialize)
+- **Keys:**
+  - Publishable (`sb_publishable_...`) — used in both mobile and web (public)
+  - Secret (`sb_secret_...`) — used only in web server-side actions (private)
+- **Env files:** `gappsdd_mobile/.env` and `gappsdd_web/.env.local` (both gitignored)
+
+### Key Architecture Decisions
+- `user_profiles` auto-created via trigger on `auth.users` insert
+- RLS: admins full access, gardeners own visits, clients own gardens
+- Mobile uses `SupabaseVisitsRepository` when authenticated, falls back to `SqliteVisitsRepository`
+- Web uses `@supabase/ssr` with Server Components and Server Actions
+
+---
+
 ## Shared: Arbor Ethos Theme
 
 Both apps share the same visual identity:
