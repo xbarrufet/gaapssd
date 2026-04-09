@@ -1,6 +1,6 @@
 # GAPP (Garden Application) — Project Blueprint
 
-**Última actualización:** 8 d'abril del 2026  
+**Última actualización:** 9 d'abril del 2026  
 **Estado general:** En desarrollo (fase de implementación)  
 **Punto de entrada:** Este documento
 
@@ -43,21 +43,29 @@ GAPP proporciona:
 
 ## 3. Technology Stack
 
-### Frontend
+### Mobile App (`gappsdd_mobile/`)
 - **Framework:** Flutter (Dart)
 - **Persistencia local:** SQLite (via sqflite)
 - **Cámara & QR:** camera + qr_flutter packages
 - **Voz:** speech_to_text package
-- **Estado:** Provider / Riverpod (recomendado)
-- **Ruteo:** GoRouter (recomendado)
+- **Estado:** Riverpod
+- **Ruteo:** GoRouter
+
+### Web Admin Dashboard (`gappsdd_web/`)
+- **Framework:** Next.js 16 (App Router, TypeScript)
+- **UI:** Tailwind CSS v4 + shadcn/ui
+- **Diseño:** Tema Arbor Ethos (compartido con mobile)
+- **Propósito:** CRUD de usuarios, jardineros y clientes
+- **Estado:** En desarrollo (estructura inicial)
 
 ### Backend (v1: NO implementado, datos hardcodeados)
-- **Datos temporales:** Almacenaje local en SQLite
+- **Datos temporales:** Almacenaje local en SQLite (mobile) / datos mock (web)
 - **Estructura futura:** Supabase o Java Spring + BBDD relacional
 
 ### Infraestructura
-- **Compilación:** Gradle (Android), Xcode (iOS)
-- **Plataformas:** iOS, Android, macOS, Web (parcial)
+- **Compilación:** Gradle (Android), Xcode (iOS), Node.js (Web admin)
+- **Plataformas mobile:** iOS, Android, macOS, Web (parcial)
+- **Plataformas web admin:** Navegador (Next.js)
 - **Sincronización:** Pendiente para fase 2
 
 ---
@@ -65,39 +73,39 @@ GAPP proporciona:
 ## 4. Estructura del Proyecto
 
 ```
-GAPPSDD/
-├── lib/                          # Código Dart
-│   ├── main.dart                 # Entry point
-│   ├── app/
-│   │   ├── app.dart              # Root widget
-│   │   └── theme/                # Theming
-│   └── features/                 # Features by domain
-│       ├── auth/                 # Autenticación (login)
-│       ├── chat/                 # Chat cliente-jardinero
-│       ├── visits/               # Core: creación, edición, cierre
-│       ├── gardens/              # Jardines asignados
-│       └── [future: clientes/]
+GAPPSDD/                          # Monorepo root
+├── gappsdd_mobile/               # Flutter mobile app
+│   ├── lib/                      # Código Dart
+│   │   ├── main.dart             # Entry point
+│   │   ├── app/                  # Root widget, theme, router, providers
+│   │   ├── core/                 # Shared utils, errors
+│   │   └── features/             # Features by domain
+│   │       ├── auth/             # Autenticación (login)
+│   │       ├── chat/             # Chat cliente-jardinero
+│   │       └── visits/           # Core: creación, edición, cierre
+│   ├── test/                     # Flutter tests
+│   ├── android/, ios/, macos/    # Platform native configs
+│   └── pubspec.yaml              # Flutter dependencies
 │
-├── android/                      # Android native config
-├── ios/                          # iOS native config
-├── macos/                        # macOS support
-├── web/                          # Web support
-├── build/                        # Build artifacts
+├── gappsdd_web/                  # Next.js admin dashboard
+│   ├── src/app/                  # App Router pages
+│   │   ├── dashboard/            # Dashboard, users, gardeners, clients
+│   │   └── (auth)/login/         # Login page
+│   ├── src/components/           # UI components (shadcn/ui + custom)
+│   ├── src/lib/                  # Utils, sample data
+│   ├── src/types/                # TypeScript types
+│   └── package.json              # Node dependencies
 │
-├── memory/                       # Project documentation
-│   ├── BLUEPRINT.md              # THIS FILE
+├── memory/                       # Shared project documentation
 │   ├── tech_stack.md             # Technical requirements
 │   ├── product_vision.md         # Business case
 │   ├── funcional.md              # Funcional features (Catalan)
 │   ├── specs/                    # Technical specifications
-│   │   ├── 01-visit-lifecycle.md
-│   │   ├── 02-visit-editing.md
-│   │   ├── 03-visit-initiation-screen.md
-│   │   └── 04-implementation-guide.md
 │   ├── sample designs/           # UI/UX mockups
 │   └── skills/                   # Specialized knowledge
 │
-├── pubspec.yaml                  # Flutter dependencies
+├── BLUEPRINT.md                  # THIS FILE
+├── CLAUDE.md                     # Claude Code instructions
 └── README.md                     # Standard project README
 ```
 
@@ -211,6 +219,11 @@ GAPPSDD/
   - Datos cargados desde SQLite (VisitsRepository) con foto count dinámico y chat navegable
   - Chat accesible desde icono en info del jardinero (no button dedicado en footer)
 
+### 🆕 Web Admin Dashboard (En desarrollo)
+- **Estructura:** Next.js 16 + Tailwind + shadcn/ui con tema Arbor Ethos
+- **Páginas:** Dashboard, Usuarios CRUD, Jardineros CRUD, Clientes CRUD
+- **Estado:** Estructura inicial con datos mock. Pendiente integración con backend.
+
 ### 📋 Planificado (v2+)
 - Backend (Supabase o Spring)
 - Sincronización remota
@@ -219,7 +232,6 @@ GAPPSDD/
 - Dashboard de gestor
 - Presupuestos integrados
 - Reportes automáticos
-- Admin panel
 
 ---
 
@@ -399,4 +411,4 @@ Para detalles implementativos, consultar:
 
 Este documento es tu **mapa mental principal**. Léelo al iniciar una sesión si vienes de contexto externo. Cada sección te dirige a documentos más detallados para profundizar.
 
-**Última revisión:** 8 d'abril del 2026
+**Última revisión:** 9 d'abril del 2026

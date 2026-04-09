@@ -1,17 +1,33 @@
-# gappsdd
+# GAPP — Garden Application
 
-A new Flutter project.
+Aplicación para conectar empresas de jardinería con sus clientes mediante verificación de visitas, documentación fotográfica y comunicación directa.
 
-## Getting Started
+## Estructura
 
-This project is a starting point for a Flutter application.
+| Directorio | Descripción | Tech |
+|---|---|---|
+| `gappsdd_mobile/` | App móvil (jardinero + cliente) | Flutter / Dart |
+| `gappsdd_web/` | Panel admin (gestión de usuarios) | Next.js / TypeScript |
+| `memory/` | Specs, diseños, documentación | Markdown |
 
-A few resources to get you started if this is your first Flutter project:
+## Quick Start
 
-- [Learn Flutter](https://docs.flutter.dev/get-started/learn-flutter)
-- [Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Flutter learning resources](https://docs.flutter.dev/reference/learning-resources)
+### Mobile
+```bash
+cd gappsdd_mobile
+flutter pub get
+flutter run
+```
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+### Web Admin
+```bash
+cd gappsdd_web
+npm install
+npm run dev
+```
+
+## Documentación
+
+- [BLUEPRINT.md](BLUEPRINT.md) — Visión general, features, roadmap
+- [CLAUDE.md](CLAUDE.md) — Instrucciones para desarrollo con Claude Code
+- [memory/specs/](memory/specs/) — Especificaciones técnicas
