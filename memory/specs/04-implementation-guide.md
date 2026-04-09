@@ -1,9 +1,11 @@
 # Implementation Guide: Visit Features Architecture & Code Structure
 
 **Versión:** 1.0  
-**Fecha:** 8 d'abril del 2026  
-**Estado:** Approved for Implementation  
+**Fecha:** 2026-04-08  
+**Estado:** Implemented  
 **Scope:** Architecture decisions, required data models, navigation, and component integration
+
+> **Nota monorepo:** Todos los paths `lib/...` son relativos a `gappsdd_mobile/`.
 
 ---
 

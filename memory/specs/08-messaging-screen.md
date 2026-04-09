@@ -1,7 +1,7 @@
 # Technical Specifications: Messaging Screen
 
 **Versión:** 1.0  
-**Fecha:** 8 d'abril del 2026  
+**Fecha:** 2026-04-08  
 **Estado:** In Design  
 **Scope:** Client-Gardener messaging interface with approval workflows and document transfer
 

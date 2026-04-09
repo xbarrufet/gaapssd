@@ -3,9 +3,9 @@ Este documento contiene una descripción de alto nivel de la solucion GAPP (Gard
 # Garden Care (Garden Application)
 
 ## Contexto
-El trabajo de jardineria de jardines particulares, sobretodo en segundas residencias,  lo realizan normalmente empresas peuqñas locales de jardineria,  el control por parte del cliente es dificil debido a la distancia y a que la revision puede ser varias semanas despues
+El trabajo de jardineria de jardines particulares, sobretodo en segundas residencias,  lo realizan normalmente empresas pequeñas locales de jardineria,  el control por parte del cliente es dificil debido a la distancia y a que la revision puede ser varias semanas despues
 Uno de los problemas principales es la falta de confianza, el cliente no sabe si el jardinero ha realizado su tarea, no hay constancia de acuerdo en el coste en ciertos trabajos, hay actividad que el jardinero ve y pide realizar y el cliente no puede evaluar si es necesario o no.
-Estas pequñas empresas de jardineria no acostumbran a tener infastrcutura digital para mantener esta comunicacion fluida entre jardinero y cliente y poder afianzar esta confianza
+Estas pequeñas empresas de jardineria no acostumbran a tener infraestructura digital para mantener esta comunicacion fluida entre jardinero y cliente y poder afianzar esta confianza
 El objetivo principal de Garden Care es permitir la generacion de un clima de confianza entre ambos
 
 ## Valor

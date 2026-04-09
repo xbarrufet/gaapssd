@@ -1,8 +1,8 @@
 # Technical Specifications: Nueva Visita (Visit Initiation Screen)
 
 **Versión:** 1.0  
-**Fecha:** 8 d'abril del 2026  
-**Estado:** Approved  
+**Fecha:** 2026-04-08  
+**Estado:** Implemented  
 **Scope:** UI/UX specification for the "Nueva Visita" screen and QR initiation flow
 
 ---

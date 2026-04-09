@@ -1,8 +1,8 @@
 # Technical Specifications: Visit Lifecycle
 
 **Versión:** 1.0  
-**Fecha:** 8 d'abril del 2026  
-**Estado:** Approved  
+**Fecha:** 2026-04-08  
+**Estado:** Implemented  
 **Scope:** Domain logic for visit creation, verification, and closure
 
 ---

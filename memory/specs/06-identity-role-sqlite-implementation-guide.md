@@ -1,9 +1,11 @@
 # Implementation Guide: Spec 05 on SQLite
 
 **Versión:** 1.0  
-**Fecha:** 8 d'abril del 2026  
-**Estado:** Approved for Implementation  
+**Fecha:** 2026-04-08  
+**Estado:** Approved  
 **Scope:** Implementación técnica en SQLite del modelo definido en `05-identity-and-role-model.md`
+
+> **Nota monorepo:** Todos los paths `lib/...` son relativos a `gappsdd_mobile/`.
 
 ---
 

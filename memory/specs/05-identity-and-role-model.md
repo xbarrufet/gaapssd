@@ -1,7 +1,7 @@
 # Technical Specifications: Identity, Roles & Garden Ownership Model
 
 **Versión:** 1.0  
-**Fecha:** 8 d'abril del 2026  
+**Fecha:** 2026-04-08  
 **Estado:** Approved  
 **Scope:** Modelo de datos base para `User`, perfiles de negocio (`Cliente`, `Jardinero`), propiedad de jardines y asignaciones
 

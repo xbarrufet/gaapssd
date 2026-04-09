@@ -1,8 +1,8 @@
 # Technical Specifications: Edicio de Visita
 
 **Versión:** 1.0  
-**Fecha:** 8 d'abril del 2026  
-**Estado:** Approved
+**Fecha:** 2026-04-08  
+**Estado:** Implemented
 
 ---
 

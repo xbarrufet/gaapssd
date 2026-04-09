@@ -1,9 +1,11 @@
 # Specification: Client Visit Screens (List & Detail)
 
 **Versión:** 1.0  
-**Fecha:** 8 d'abril del 2026  
+**Fecha:** 2026-04-08  
 **Estado:** Implemented  
 **Scope:** Client visit list and detail screens, data models, and navigation
+
+> **Nota monorepo:** Todos los paths `lib/...` son relativos a `gappsdd_mobile/`.
 
 ---
 
