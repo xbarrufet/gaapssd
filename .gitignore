@@ -51,3 +51,6 @@ gappsdd_web/node_modules/
 
 # Dependencies
 node_modules/
+
+# Claude Code
+skills-lock.json
