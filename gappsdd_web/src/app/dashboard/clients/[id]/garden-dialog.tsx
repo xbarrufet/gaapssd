@@ -1,7 +1,8 @@
 "use client";
 
 import { useRef, useState } from "react";
-import { Check, ChevronsUpDown, User } from "lucide-react";
+import { Check, ChevronsUpDown, QrCode, User } from "lucide-react";
+import { QrPreviewDialog } from "./qr-preview-dialog";
 import {
   Dialog,
   DialogContent,
@@ -50,6 +51,8 @@ export function GardenDialog({
   );
   const [gardenerSearch, setGardenerSearch] = useState("");
   const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [qrOpen, setQrOpen] = useState(false);
+  const hasGps = garden?.latitude != null && garden?.longitude != null;
 
   // Reset state when dialog opens with different garden
   const prevGardenId = useRef<string | null>(null);
@@ -227,6 +230,17 @@ export function GardenDialog({
           </div>
 
           <DialogFooter>
+            {isEditing && hasGps && (
+              <Button
+                type="button"
+                variant="outline"
+                className="sm:mr-auto"
+                onClick={() => setQrOpen(true)}
+              >
+                <QrCode className="mr-2 h-4 w-4" />
+                Generar QR
+              </Button>
+            )}
             <Button
               type="button"
               variant="outline"
@@ -240,6 +254,15 @@ export function GardenDialog({
           </DialogFooter>
         </form>
       </DialogContent>
+
+      {garden && (
+        <QrPreviewDialog
+          open={qrOpen}
+          onOpenChange={setQrOpen}
+          gardenId={garden.id}
+          gardenName={garden.name}
+        />
+      )}
     </Dialog>
   );
 }

@@ -119,7 +119,8 @@ GAPPSDD/                          # Monorepo root
 ### 5.1 Gestión de Visitas (Core)
 
 #### Creación de Visita
-- **QR Scan:** Jardinero escanea QR del jardín
+- **QR Scan:** Jardinero escanea QR del jardín (generado desde web admin)
+  - QR contiene solo el gardenId (UUID, texto plano, corrección nivel H con logo)
   - Valida que el jardín está asignado
   - Valida proximidad GPS (≤ 10m)
   - Crea visita **Verificada**
@@ -224,11 +225,12 @@ GAPPSDD/                          # Monorepo root
 
 ### 🆕 Web Admin Dashboard (En desarrollo)
 - **Estructura:** Next.js 16 + Tailwind + shadcn/ui con tema Arbor Ethos
-- **Páginas:** Dashboard, Usuarios CRUD, Jardineros CRUD, Clientes CRUD
-- **Estado:** Estructura inicial con datos mock. Pendiente integración con backend.
+- **Backend:** Supabase (Auth, PostgreSQL con RLS, Storage)
+- **Páginas:** Dashboard, Usuarios CRUD, Jardineros CRUD, Clientes CRUD (con jardines expandibles en lista)
+- **QR de Jardín:** Generación client-side (react-qrcode-logo) con logo GAPPSDD, disponible en dialog de edición de jardín (requiere GPS). Descarga PNG.
+- **Estado:** Integrado con Supabase. CRUD funcional para usuarios, jardineros, clientes y jardines.
 
 ### 📋 Planificado (v2+)
-- Backend (Supabase o Spring)
 - Sincronización remota
 - Chat completo
 - Dashboard de cliente web
@@ -414,4 +416,4 @@ Para detalles implementativos, consultar:
 
 Este documento es tu **mapa mental principal**. Léelo al iniciar una sesión si vienes de contexto externo. Cada sección te dirige a documentos más detallados para profundizar.
 
-**Última revisión:** 9 d'abril del 2026
+**Última revisión:** 10 d'abril del 2026

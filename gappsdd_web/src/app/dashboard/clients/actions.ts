@@ -8,11 +8,11 @@ export async function getClients() {
   const supabase = await createClient();
   const { data, error } = await supabase
     .from("client_profiles")
-    .select("*, gardens(count)")
+    .select("*, gardens(id, name, address, latitude, longitude, garden_assignments(id, gardener_id, is_active, gardener_profiles(id, display_name)))")
     .order("created_at", { ascending: false });
 
   if (error) {
-    // Fallback without count
+    // Fallback without gardens
     const { data: simple, error: simpleError } = await supabase
       .from("client_profiles")
       .select("*")
