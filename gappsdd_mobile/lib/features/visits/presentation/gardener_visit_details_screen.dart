@@ -1,14 +1,19 @@
+import 'dart:io';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:image_picker/image_picker.dart';
 
 import '../../../app/providers.dart';
+import '../../../app/router.dart';
 import '../../../app/theme/app_theme.dart';
 import '../../auth/domain/auth_state.dart';
 import '../../chat/domain/chat_models.dart';
 import '../../chat/presentation/chat_with_request_modes_screen.dart';
+import '../data/location_tracker.dart';
 import '../domain/client_visits_data.dart';
 import 'widgets/activity_gallery.dart';
 import 'widgets/client_card.dart';
@@ -34,6 +39,7 @@ class _GardenerVisitDetailsScreenState extends ConsumerState<GardenerVisitDetail
   late CommentController _commentController;
   ActiveVisitSnapshot? _visit;
   bool _isLoading = true;
+  LocationTracker? _locationTracker;
 
   @override
   void initState() {
@@ -44,6 +50,7 @@ class _GardenerVisitDetailsScreenState extends ConsumerState<GardenerVisitDetail
 
   @override
   void dispose() {
+    _locationTracker?.stop();
     _commentController.dispose();
     super.dispose();
   }
@@ -123,6 +130,11 @@ class _GardenerVisitDetailsScreenState extends ConsumerState<GardenerVisitDetail
           }
         });
       }
+
+      // Start location tracker only for new active visits with a known DB id.
+      if (visit != null && visit.isActive && visit.id != null && _locationTracker == null) {
+        _startLocationTracker(visit.id!);
+      }
     } catch (e) {
       if (mounted) {
         setState(() => _isLoading = false);
@@ -131,6 +143,20 @@ class _GardenerVisitDetailsScreenState extends ConsumerState<GardenerVisitDetail
         );
       }
     }
+  }
+
+  void _startLocationTracker(String visitId) {
+    _locationTracker = LocationTracker(
+      onPoint: (lat, lng, accuracy) {
+        ref.read(visitsRepositoryProvider).recordLocationPoint(
+          visitId: visitId,
+          lat: lat,
+          lng: lng,
+          accuracy: accuracy,
+        );
+      },
+    );
+    _locationTracker!.start();
   }
 
   Future<void> _closeVisit() async {
@@ -147,6 +173,8 @@ class _GardenerVisitDetailsScreenState extends ConsumerState<GardenerVisitDetail
 
     try {
       await ref.read(visitsRepositoryProvider).closeActiveVisit();
+      _locationTracker?.stop();
+      _locationTracker = null;
       await _loadVisit();
       if (!mounted) {
         return;
@@ -162,31 +190,137 @@ class _GardenerVisitDetailsScreenState extends ConsumerState<GardenerVisitDetail
 
   Future<void> _addPhoto() async {
     HapticFeedback.mediumImpact();
-    if (!mounted) {
+    if (!mounted) return;
+
+    final source = await _pickImageSource();
+    if (source == null) return;
+
+    final picker = ImagePicker();
+    XFile? file;
+    try {
+      file = await picker.pickImage(
+        source: source,
+        imageQuality: 85,
+        maxWidth: 1920,
+      );
+    } on PlatformException catch (e) {
+      if (!mounted) return;
+      final isCamera = source == ImageSource.camera;
+      if (e.code == 'camera_access_denied') {
+        _showMessage('Permiso de cámara denegado. Actívalo en Ajustes.');
+      } else if (isCamera) {
+        _showMessage('Cámara no disponible en este dispositivo.');
+      } else {
+        _showMessage('No se pudo acceder a la galería.');
+      }
       return;
     }
 
-    try {
-      final timestamp = DateTime.now().millisecondsSinceEpoch;
-      final localPath = 'local/photos/photo-$timestamp.jpg';
-      const thumbnailPath = 'local/photos/thumb.jpg';
+    if (file == null || !mounted) return;
 
+    try {
       await ref.read(visitsRepositoryProvider).addPhotoToActiveVisit(
         photoLabel: '',
-        localPath: localPath,
-        thumbnailPath: thumbnailPath,
+        localPath: file.path,
+        thumbnailPath: file.path,
       );
 
       await _loadVisit();
-      if (!mounted) {
-        return;
-      }
+      if (!mounted) return;
 
       _showMessage('Foto añadida correctamente');
     } catch (e) {
       if (!mounted) return;
       _showMessage('Error añadiendo foto: $e');
     }
+  }
+
+  void _showPhotoFullScreen(LocalVisitPhoto photo) {
+    final path = photo.localPath.isNotEmpty ? photo.localPath : photo.thumbnailPath;
+    final isNetwork = path.startsWith('http');
+
+    Widget imageWidget = isNetwork
+        ? Image.network(
+            path,
+            fit: BoxFit.contain,
+            errorBuilder: (context, err, stack) => const Center(
+              child: Icon(Icons.broken_image_rounded, color: Colors.white54, size: 64),
+            ),
+          )
+        : Image.file(File(path), fit: BoxFit.contain);
+
+    showDialog<void>(
+      context: context,
+      builder: (ctx) => Dialog.fullscreen(
+        backgroundColor: Colors.black,
+        child: Stack(
+          children: [
+            Center(
+              child: InteractiveViewer(
+                minScale: 1,
+                maxScale: 4,
+                child: imageWidget,
+              ),
+            ),
+            SafeArea(
+              child: Align(
+                alignment: Alignment.topRight,
+                child: IconButton(
+                  onPressed: () => Navigator.of(ctx).pop(),
+                  icon: const Icon(Icons.close_rounded, color: Colors.white, size: 28),
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Future<ImageSource?> _pickImageSource() {
+    if (_isCupertino) {
+      return showCupertinoModalPopup<ImageSource>(
+        context: context,
+        builder: (context) => CupertinoActionSheet(
+          actions: [
+            CupertinoActionSheetAction(
+              onPressed: () => Navigator.of(context).pop(ImageSource.camera),
+              child: const Text('Tomar foto'),
+            ),
+            CupertinoActionSheetAction(
+              onPressed: () => Navigator.of(context).pop(ImageSource.gallery),
+              child: const Text('Elegir de la galería'),
+            ),
+          ],
+          cancelButton: CupertinoActionSheetAction(
+            onPressed: () => Navigator.of(context).pop(),
+            child: const Text('Cancelar'),
+          ),
+        ),
+      );
+    }
+
+    return showModalBottomSheet<ImageSource>(
+      context: context,
+      showDragHandle: true,
+      builder: (context) => SafeArea(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            ListTile(
+              leading: const Icon(Icons.camera_alt_rounded),
+              title: const Text('Tomar foto'),
+              onTap: () => Navigator.of(context).pop(ImageSource.camera),
+            ),
+            ListTile(
+              leading: const Icon(Icons.photo_library_rounded),
+              title: const Text('Elegir de la galería'),
+              onTap: () => Navigator.of(context).pop(ImageSource.gallery),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 
   Future<void> _removePhoto(String photoId) async {
@@ -362,9 +496,12 @@ class _GardenerVisitDetailsScreenState extends ConsumerState<GardenerVisitDetail
       );
     }
 
-    return Scaffold(
+    return GestureDetector(
+      onTap: () => FocusScope.of(context).unfocus(),
+      child: Scaffold(
       body: SafeArea(
         child: ListView(
+          keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
           padding: const EdgeInsets.only(bottom: 120),
           children: [
             Padding(
@@ -401,6 +538,19 @@ class _GardenerVisitDetailsScreenState extends ConsumerState<GardenerVisitDetail
                 onManualExit: _visit!.isActive ? _closeVisit : null,
               ),
             ),
+            if (widget.selectedVisitId != null)
+              Padding(
+                padding: const EdgeInsets.fromLTRB(16, 12, 16, 0),
+                child: SizedBox(
+                  width: double.infinity,
+                  child: OutlinedButton.icon(
+                    onPressed: () =>
+                        context.push(AppRoutes.visitHeatmap, extra: widget.selectedVisitId),
+                    icon: const Icon(Icons.map_outlined),
+                    label: const Text('Mapa de Actividad'),
+                  ),
+                ),
+              ),
             Padding(
               padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
               child: Text(
@@ -429,11 +579,13 @@ class _GardenerVisitDetailsScreenState extends ConsumerState<GardenerVisitDetail
                 photos: _visit!.photos,
                 onAddPhoto: _addPhoto,
                 onRemovePhoto: _removePhoto,
+                onPhotoTap: _showPhotoFullScreen,
               ),
             ),
           ],
         ),
       ),
+    ),
     );
   }
 }

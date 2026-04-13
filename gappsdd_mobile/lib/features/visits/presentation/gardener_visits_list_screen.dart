@@ -7,7 +7,9 @@ import '../../../app/providers.dart';
 import '../../../app/router.dart';
 import '../../../app/theme/app_theme.dart';
 import '../../../app/widgets/adaptive_tappable.dart';
+import '../../../app/widgets/profile_menu.dart';
 import '../../../core/utils/format_utils.dart' as fmt;
+import '../../auth/domain/auth_state.dart';
 import '../domain/client_visits_data.dart';
 
 class GardenerVisitsListScreen extends ConsumerStatefulWidget {
@@ -21,8 +23,21 @@ class GardenerVisitsListScreen extends ConsumerStatefulWidget {
 
 class _GardenerVisitsListScreenState extends ConsumerState<GardenerVisitsListScreen> {
   String _searchQuery = '';
+  late Future<({
+    List<VisitSummary> visits,
+    Map<String, String> gardenNamesById,
+    ActiveVisitSnapshot? activeVisit,
+  })> _future;
 
   bool get _isCupertino => Theme.of(context).platform == TargetPlatform.iOS;
+
+  @override
+  void initState() {
+    super.initState();
+    _future = _loadScreenData();
+  }
+
+  void _refresh() => setState(() => _future = _loadScreenData());
 
   void _showMessage(String message) {
     if (!mounted) return;
@@ -57,7 +72,7 @@ class _GardenerVisitsListScreenState extends ConsumerState<GardenerVisitsListScr
           Map<String, String> gardenNamesById,
           ActiveVisitSnapshot? activeVisit,
         })>(
-          future: _loadScreenData(),
+          future: _future,
           builder: (context, snapshot) {
             if (snapshot.connectionState != ConnectionState.done) {
               return const Center(child: CircularProgressIndicator(color: AppColors.primary));
@@ -130,7 +145,16 @@ class _GardenerVisitsListScreenState extends ConsumerState<GardenerVisitsListScr
             return ListView(
               padding: const EdgeInsets.fromLTRB(16, 12, 16, 108),
               children: [
-                Text('Visits', style: Theme.of(context).textTheme.headlineMedium),
+                Row(
+                  children: [
+                    Expanded(
+                      child: Text('Visits', style: Theme.of(context).textTheme.headlineMedium),
+                    ),
+                    ProfileAvatarButton(
+                      displayName: ref.read(authProvider)?.displayName ?? '',
+                    ),
+                  ],
+                ),
                 const SizedBox(height: 4),
                 Text('${visits.length} visitas', style: Theme.of(context).textTheme.labelMedium),
                 const SizedBox(height: 12),
@@ -179,9 +203,7 @@ class _GardenerVisitsListScreenState extends ConsumerState<GardenerVisitsListScr
                     onTap: () async {
                       if (card.isActive && activeVisit != null) {
                         await context.push(AppRoutes.gardenerVisitDetail, extra: {'garden': activeVisit.garden});
-                        if (mounted) {
-                          setState(() {});
-                        }
+                        if (mounted) _refresh();
                         return;
                       }
 
@@ -193,9 +215,7 @@ class _GardenerVisitsListScreenState extends ConsumerState<GardenerVisitsListScr
                           return;
                         }
                         await context.push(AppRoutes.gardenerVisitDetail, extra: {'garden': snapshot.garden, 'selectedVisitId': card.visit.id});
-                        if (mounted) {
-                          setState(() {});
-                        }
+                        if (mounted) _refresh();
                       } catch (e) {
                         if (!context.mounted) {
                           return;

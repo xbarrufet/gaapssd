@@ -2,84 +2,81 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:mobile_scanner/mobile_scanner.dart';
 
 import '../../../app/providers.dart';
 import '../../../app/router.dart';
-import '../../../app/theme/app_theme.dart';
 import '../../../app/widgets/loading_button.dart';
 import '../../../core/errors/app_error.dart';
 import '../domain/client_visits_data.dart';
 
 class NewVisitScreen extends ConsumerStatefulWidget {
-  const NewVisitScreen({
-    super.key,
-  });
+  const NewVisitScreen({super.key});
 
   @override
   ConsumerState<NewVisitScreen> createState() => _NewVisitScreenState();
 }
 
 class _NewVisitScreenState extends ConsumerState<NewVisitScreen> {
+  final MobileScannerController _scannerController = MobileScannerController(
+    detectionSpeed: DetectionSpeed.noDuplicates,
+    returnImage: false,
+  );
+
+  bool _isProcessing = false;
   bool get _isCupertino => Theme.of(context).platform == TargetPlatform.iOS;
+
+  @override
+  void dispose() {
+    _scannerController.dispose();
+    super.dispose();
+  }
 
   void _showMessage(String message) {
     if (!mounted) return;
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(message)));
   }
 
-  Future<void> _checkAndOpenActiveVisit() async {
-    final activeVisit = await ref.read(visitsRepositoryProvider).loadActiveVisit();
-    if (!mounted || activeVisit == null) {
+  bool _isValidUuid(String value) {
+    const uuidPattern =
+        r'^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$';
+    return RegExp(uuidPattern).hasMatch(value);
+  }
+
+  Future<void> _onQrDetected(BarcodeCapture capture) async {
+    if (_isProcessing) return;
+
+    final barcode = capture.barcodes.firstOrNull;
+    final rawValue = barcode?.rawValue;
+    if (rawValue == null || rawValue.isEmpty) return;
+
+    if (!_isValidUuid(rawValue)) {
+      _showMessage('QR inválido, intenta de nuevo');
       return;
     }
 
-    _showMessage('Ya tienes una visita activa');
+    setState(() => _isProcessing = true);
+    await _scannerController.stop();
 
-    await context.push(AppRoutes.gardenerVisitDetail, extra: {'garden': activeVisit.garden});
-  }
-
-  Future<void> _startVisitFromQrDemo() async {
     try {
       final repo = ref.read(visitsRepositoryProvider);
+
       final activeVisit = await repo.loadActiveVisit();
       if (activeVisit != null) {
-        if (!mounted) {
-          return;
-        }
+        if (!mounted) return;
         _showMessage('Ya tienes una visita en progreso');
         await context.push(AppRoutes.gardenerVisitDetail, extra: {'garden': activeVisit.garden});
         return;
       }
 
-      final assignedGardens = await repo.loadAssignedGardensVisitStatus();
-      if (assignedGardens.isEmpty) {
-        if (!mounted) {
-          return;
-        }
-        _showMessage('No tienes jardines asignados');
-        return;
-      }
-
-      final selectedGarden = await _pickGarden(
-        title: 'Selecciona jardín para QR (demo)',
-        gardens: assignedGardens,
-      );
-
-      if (selectedGarden == null || !mounted) {
-        return;
-      }
-
-      final visit = await repo.startVisitFromQr(gardenId: selectedGarden.id);
-      if (!mounted) {
-        return;
-      }
-
+      final visit = await repo.startVisitFromQr(gardenId: rawValue);
+      if (!mounted) return;
       context.pushReplacement(AppRoutes.gardenerVisitDetail, extra: {'garden': visit.garden});
     } on AppError catch (error) {
-      if (!mounted) {
-        return;
-      }
+      if (!mounted) return;
       _showMessage(error.message);
+      setState(() => _isProcessing = false);
+      await _scannerController.start();
     }
   }
 
@@ -88,18 +85,14 @@ class _NewVisitScreenState extends ConsumerState<NewVisitScreen> {
       final repo = ref.read(visitsRepositoryProvider);
       final activeVisit = await repo.loadActiveVisit();
       if (activeVisit != null) {
-        if (!mounted) {
-          return;
-        }
+        if (!mounted) return;
         _showMessage('Ya tienes una visita en progreso');
         await context.push(AppRoutes.gardenerVisitDetail, extra: {'garden': activeVisit.garden});
         return;
       }
 
       final mode = await _pickManualMode();
-      if (mode == null) {
-        return;
-      }
+      if (mode == null) return;
 
       if (mode == _ManualStartMode.nearbySingle || mode == _ManualStartMode.nearbyMultiple) {
         final nearbyGardens = await repo.loadNearbyManualStartCandidates();
@@ -114,9 +107,7 @@ class _NewVisitScreenState extends ConsumerState<NewVisitScreen> {
             gardenId: selected.garden.id,
             isVerified: true,
           );
-          if (!mounted) {
-            return;
-          }
+          if (!mounted) return;
           context.pushReplacement(AppRoutes.gardenerVisitDetail, extra: {'garden': visit.garden});
           return;
         }
@@ -138,26 +129,20 @@ class _NewVisitScreenState extends ConsumerState<NewVisitScreen> {
               .toList(),
         );
 
-        if (selectedGarden == null) {
-          return;
-        }
+        if (selectedGarden == null) return;
 
         final visit = await repo.startManualVisit(
           gardenId: selectedGarden.id,
           isVerified: true,
         );
-        if (!mounted) {
-          return;
-        }
+        if (!mounted) return;
         context.pushReplacement(AppRoutes.gardenerVisitDetail, extra: {'garden': visit.garden});
         return;
       }
 
       await _startManualFallback(isVerified: false);
     } on AppError catch (error) {
-      if (!mounted) {
-        return;
-      }
+      if (!mounted) return;
       _showMessage(error.message);
     }
   }
@@ -166,9 +151,7 @@ class _NewVisitScreenState extends ConsumerState<NewVisitScreen> {
     final repo = ref.read(visitsRepositoryProvider);
     final assignedGardens = await repo.loadAssignedGardensVisitStatus();
     if (assignedGardens.isEmpty) {
-      if (!mounted) {
-        return;
-      }
+      if (!mounted) return;
       _showMessage('No tienes jardines asignados');
       return;
     }
@@ -178,19 +161,14 @@ class _NewVisitScreenState extends ConsumerState<NewVisitScreen> {
       gardens: assignedGardens,
     );
 
-    if (selected == null) {
-      return;
-    }
+    if (selected == null) return;
 
     final visit = await repo.startManualVisit(
       gardenId: selected.id,
       isVerified: isVerified,
     );
 
-    if (!mounted) {
-      return;
-    }
-
+    if (!mounted) return;
     context.pushReplacement(AppRoutes.gardenerVisitDetail, extra: {'garden': visit.garden});
   }
 
@@ -332,18 +310,56 @@ class _NewVisitScreenState extends ConsumerState<NewVisitScreen> {
     return Scaffold(
       body: Stack(
         children: [
-          Container(
-            decoration: const BoxDecoration(
-              gradient: LinearGradient(
-                begin: Alignment.topCenter,
-                end: Alignment.bottomCenter,
-                colors: [Color(0xFF1D3325), Color(0xFF4B6A4F)],
+          // Camera preview — full screen
+          MobileScanner(
+            controller: _scannerController,
+            onDetect: _onQrDetected,
+          ),
+
+          // Dark overlay at top for header readability
+          Positioned(
+            top: 0,
+            left: 0,
+            right: 0,
+            child: Container(
+              height: 120,
+              decoration: const BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                  colors: [Color(0xCC1D3325), Colors.transparent],
+                ),
               ),
             ),
           ),
+
+          // Dark overlay at bottom for button readability
+          Positioned(
+            bottom: 0,
+            left: 0,
+            right: 0,
+            child: Container(
+              height: 160,
+              decoration: const BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.bottomCenter,
+                  end: Alignment.topCenter,
+                  colors: [Color(0xDD1D3325), Colors.transparent],
+                ),
+              ),
+            ),
+          ),
+
+          // Scanning frame overlay
+          Center(
+            child: _ScanFrame(isProcessing: _isProcessing),
+          ),
+
+          // UI controls
           SafeArea(
             child: Column(
               children: [
+                // Header
                 Padding(
                   padding: const EdgeInsets.fromLTRB(8, 8, 8, 0),
                   child: Row(
@@ -365,65 +381,27 @@ class _NewVisitScreenState extends ConsumerState<NewVisitScreen> {
                           textAlign: TextAlign.center,
                         ),
                       ),
-                      IconButton(
-                        onPressed: _checkAndOpenActiveVisit,
-                        icon: Icon(
-                          isCupertino
-                              ? CupertinoIcons.check_mark_circled
-                              : Icons.assignment_turned_in_outlined,
-                        ),
-                        color: Colors.white,
-                      ),
+                      // Spacer to keep title centered
+                      const SizedBox(width: 48),
                     ],
                   ),
                 ),
-                Expanded(
-                  child: Padding(
-                    padding: const EdgeInsets.all(16),
-                    child: Container(
-                      decoration: BoxDecoration(
-                        color: Colors.black.withValues(alpha: 0.28),
-                        borderRadius: BorderRadius.circular(20),
-                        border: Border.all(color: Colors.white.withValues(alpha: 0.22)),
-                      ),
-                      child: Center(
-                        child: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Icon(
-                              isCupertino ? CupertinoIcons.qrcode_viewfinder : Icons.qr_code_scanner_rounded,
-                              size: 92,
-                              color: Colors.white,
-                            ),
-                            const SizedBox(height: 12),
-                            Text(
-                              'Apunta al QR del jardín',
-                              style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                                    color: Colors.white,
-                                  ),
-                            ),
-                            const SizedBox(height: 8),
-                            Text(
-                              'En esta versión se simula la lectura de QR',
-                              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                                    color: Colors.white.withValues(alpha: 0.82),
-                                  ),
-                            ),
-                            const SizedBox(height: 18),
-                            LoadingButton(
-                              onPressed: _startVisitFromQrDemo,
-                              label: 'Escanear QR (Demo)',
-                              icon: Icons.camera_alt_rounded,
-                              backgroundColor: AppColors.secondary,
-                              foregroundColor: AppColors.onPrimary,
-                              minimumSize: const Size(220, 54),
-                            ),
-                          ],
-                        ),
-                      ),
+
+                const Spacer(),
+
+                // Scan hint
+                if (!_isProcessing)
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 16),
+                    child: Text(
+                      'Apunta al QR del jardín',
+                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                            color: Colors.white.withValues(alpha: 0.9),
+                          ),
                     ),
                   ),
-                ),
+
+                // Manual start button
                 Padding(
                   padding: const EdgeInsets.fromLTRB(16, 0, 16, 24),
                   child: LoadingButton(
@@ -431,7 +409,7 @@ class _NewVisitScreenState extends ConsumerState<NewVisitScreen> {
                     label: 'Inicio Manual',
                     icon: Icons.play_circle_fill_rounded,
                     backgroundColor: const Color(0xFFD6EAB6),
-                    foregroundColor: AppColors.secondary,
+                    foregroundColor: const Color(0xFF1D3325),
                     minimumSize: const Size.fromHeight(56),
                   ),
                 ),
@@ -440,6 +418,40 @@ class _NewVisitScreenState extends ConsumerState<NewVisitScreen> {
           ),
         ],
       ),
+    );
+  }
+}
+
+/// Animated scanning frame shown in the center of the camera preview.
+class _ScanFrame extends StatelessWidget {
+  const _ScanFrame({required this.isProcessing});
+
+  final bool isProcessing;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Container(
+          width: 240,
+          height: 240,
+          decoration: BoxDecoration(
+            border: Border.all(
+              color: isProcessing
+                  ? Colors.green.shade300
+                  : Colors.white.withValues(alpha: 0.8),
+              width: 3,
+            ),
+            borderRadius: BorderRadius.circular(16),
+          ),
+          child: isProcessing
+              ? const Center(
+                  child: CircularProgressIndicator(color: Colors.white),
+                )
+              : null,
+        ),
+      ],
     );
   }
 }

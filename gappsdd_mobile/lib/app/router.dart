@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
@@ -12,10 +12,27 @@ import '../features/visits/presentation/client_visits_screen.dart';
 import '../features/visits/presentation/gardener_visit_details_screen.dart';
 import '../features/visits/presentation/gardener_visits_list_screen.dart';
 import '../features/visits/presentation/new_visit_screen.dart';
+import '../features/visits/presentation/visit_heatmap_screen.dart';
 import '../features/visits/presentation/visit_report_screen.dart';
+import 'nav_keys.dart';
 import 'providers.dart';
 import 'widgets/client_shell.dart';
 import 'widgets/gardener_shell.dart';
+
+/// ChangeNotifier that bridges Riverpod auth state → GoRouter refreshListenable.
+/// Ensures the router is created once and redirects re-run on auth changes,
+/// without recreating the GoRouter (which causes duplicate GlobalKey errors).
+class _RouterNotifier extends ChangeNotifier {
+  _RouterNotifier(this._ref) {
+    _ref.listen<AuthState?>(authProvider, (prev, next) => notifyListeners());
+  }
+
+  final Ref _ref;
+
+  AuthState? get _auth => _ref.read(authProvider);
+  bool get isLoggedIn => _auth != null;
+  bool get isClient => _auth?.isClient ?? false;
+}
 
 /// Route path constants.
 abstract final class AppRoutes {
@@ -36,25 +53,26 @@ abstract final class AppRoutes {
 
   // Client full-screen
   static const clientVisitReport = '/client/visit-report';
+
+  // Shared full-screen
+  static const visitHeatmap = '/visit-heatmap';
 }
 
-final _rootNavigatorKey = GlobalKey<NavigatorState>();
-final _gardenerShellKey = GlobalKey<NavigatorState>();
-final _clientShellKey = GlobalKey<NavigatorState>();
+// Navigator keys are declared in nav_keys.dart to avoid circular imports.
 
 final routerProvider = Provider<GoRouter>((ref) {
-  final auth = ref.watch(authProvider);
+  final notifier = _RouterNotifier(ref);
 
   return GoRouter(
-    navigatorKey: _rootNavigatorKey,
+    navigatorKey: rootNavigatorKey,
     initialLocation: AppRoutes.login,
+    refreshListenable: notifier,
     redirect: (context, state) {
-      final isLoggedIn = auth != null;
       final isOnLogin = state.matchedLocation == AppRoutes.login;
 
-      if (!isLoggedIn && !isOnLogin) return AppRoutes.login;
-      if (isLoggedIn && isOnLogin) {
-        return auth.isClient ? AppRoutes.clientVisits : AppRoutes.gardenerVisits;
+      if (!notifier.isLoggedIn && !isOnLogin) return AppRoutes.login;
+      if (notifier.isLoggedIn && isOnLogin) {
+        return notifier.isClient ? AppRoutes.clientVisits : AppRoutes.gardenerVisits;
       }
       return null;
     },
@@ -66,7 +84,7 @@ final routerProvider = Provider<GoRouter>((ref) {
 
       // ── Gardener shell (bottom nav) ──
       ShellRoute(
-        navigatorKey: _gardenerShellKey,
+        navigatorKey: gardenerShellKey,
         builder: (context, state, child) => GardenerShell(
           currentPath: state.matchedLocation,
           child: child,
@@ -106,12 +124,12 @@ final routerProvider = Provider<GoRouter>((ref) {
       // ── Gardener full-screen routes (no bottom nav) ──
       GoRoute(
         path: AppRoutes.gardenerNewVisit,
-        parentNavigatorKey: _rootNavigatorKey,
+        parentNavigatorKey: rootNavigatorKey,
         builder: (context, state) => const NewVisitScreen(),
       ),
       GoRoute(
         path: AppRoutes.gardenerVisitDetail,
-        parentNavigatorKey: _rootNavigatorKey,
+        parentNavigatorKey: rootNavigatorKey,
         builder: (context, state) {
           final extra = state.extra as Map<String, dynamic>;
           return GardenerVisitDetailsScreen(
@@ -123,7 +141,7 @@ final routerProvider = Provider<GoRouter>((ref) {
 
       // ── Client shell (bottom nav) ──
       ShellRoute(
-        navigatorKey: _clientShellKey,
+        navigatorKey: clientShellKey,
         builder: (context, state, child) => ClientShell(
           currentPath: state.matchedLocation,
           child: child,
@@ -154,13 +172,28 @@ final routerProvider = Provider<GoRouter>((ref) {
         ],
       ),
 
+      // ── Shared full-screen routes ──
+      GoRoute(
+        path: AppRoutes.visitHeatmap,
+        parentNavigatorKey: rootNavigatorKey,
+        builder: (context, state) => VisitHeatmapScreen(visitId: state.extra as String),
+      ),
+
       // ── Client full-screen routes ──
       GoRoute(
         path: AppRoutes.clientVisitReport,
-        parentNavigatorKey: _rootNavigatorKey,
+        parentNavigatorKey: rootNavigatorKey,
         builder: (context, state) {
-          final visit = state.extra as VisitSummary;
-          return VisitReportScreen(visit: visit);
+          // extra can be a VisitSummary (from visits list) or a String visitId
+          // (from a push notification tap).
+          final extra = state.extra;
+          final String visitId;
+          if (extra is VisitSummary) {
+            visitId = extra.id;
+          } else {
+            visitId = extra as String;
+          }
+          return VisitReportScreen(visitId: visitId);
         },
       ),
     ],

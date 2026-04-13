@@ -14,6 +14,9 @@
 | 06 | [Identity/Role SQLite Implementation](06-identity-role-sqlite-implementation-guide.md) | Approved | 2026-04-08 |
 | 07 | [Client Visit Screens](07-client-visit-screens.md) | Implemented | 2026-04-08 |
 | 08 | [Messaging Screen](08-messaging-screen.md) | In Design | 2026-04-08 |
+| 09 | [Garden QR Generation](09-garden-qr-generation.md) | Implemented | 2026-04-10 |
+| 10 | [Visit Entry/Exit Notifications](10-visit-entry-exit-notifications.md) | In Design | 2026-04-10 |
+| 11 | [Visit Heatmap](11-visit-heatmap.md) | Implemented | 2026-04-13 |
 
 ### Estados
 
@@ -34,6 +37,10 @@
  └─► 07 Client Visit Screens (vista cliente de visitas de 01)
 
 08 Messaging Screen (independiente, futuro)
+
+01 Visit Lifecycle
+ ├─► 10 Visit Entry/Exit Notifications (notifica al cliente en inicio/cierre)
+ └─► 11 Visit Heatmap (registra posición durante visita, visualiza como mapa de calor)
 ```
 
 ## Convenciones

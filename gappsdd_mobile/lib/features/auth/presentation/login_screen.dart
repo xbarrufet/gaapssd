@@ -3,6 +3,7 @@ import 'dart:ui';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../app/router.dart';
@@ -31,7 +32,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
 
   bool _loading = false;
 
-  Future<void> _signIn({required bool asClient}) async {
+  Future<void> _signIn() async {
     final email = _emailController.text.trim();
     final password = _passwordController.text;
 
@@ -82,6 +83,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
             child: Image.network(
               'https://lh3.googleusercontent.com/aida-public/AB6AXuAlD_AzKcPcQWFZezgoaHJA0smhq6FQQ73a797S1yBFQJRkmuKGp0GPtofDEjeCDdiVErkCz6WxXbK172EIomYR0nJkh4nuBbpOXVKEAN6kZZBzdTbkjL7elMeF2rbQL9tjLX4l_SDwuStZJqaGmlxvirzCWnD120bDC1uBeg-5g3bcuOYHyP0UsQr5A76zkJqHu41N9q-5NBBr27dzZJMcMDMbZms7R3Cvr6x1X7k4HpPed-UPng0sNkszQyVjDX5O-sVsNSjyZEKj',
               fit: BoxFit.cover,
+              cacheWidth: 1080,
               errorBuilder: (_, _, _) => const SizedBox.expand(),
             ),
           ),
@@ -106,18 +108,10 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                   child: Column(
                     children: [
                       const SizedBox(height: 8),
-                      Container(
-                        width: 62,
-                        height: 62,
-                        decoration: const BoxDecoration(
-                          color: AppColors.surface,
-                          shape: BoxShape.circle,
-                        ),
-                        child: Icon(
-                          isCupertino ? CupertinoIcons.leaf_arrow_circlepath : Icons.local_florist_rounded,
-                          size: 34,
-                          color: AppColors.primary,
-                        ),
+                      SvgPicture.asset(
+                        'assets/logo_gapp.svg',
+                        width: 90,
+                        height: 108,
                       ),
                       const SizedBox(height: 14),
                       Text(
@@ -195,37 +189,47 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                                         ),
                                 ),
                                 const SizedBox(height: 18),
-                                Row(
-                                  children: [
-                                    Expanded(
-                                      child: _RoleSignInButton(
-                                        isCupertino: isCupertino,
-                                        onPressed: () => _signIn(asClient: true),
-                                        backgroundColor: AppColors.primary,
-                                        foregroundColor: AppColors.onPrimary,
-                                        icon: isCupertino ? CupertinoIcons.person_fill : Icons.person_rounded,
-                                        label: 'Sign In Client',
-                                      ),
+                                if (isCupertino)
+                                  CupertinoButton(
+                                    onPressed: _loading ? null : _signIn,
+                                    color: AppColors.primary,
+                                    borderRadius: BorderRadius.circular(14),
+                                    padding: const EdgeInsets.symmetric(vertical: 14),
+                                    child: _loading
+                                        ? const CupertinoActivityIndicator()
+                                        : Text(
+                                            'Entrar',
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .labelMedium
+                                                ?.copyWith(color: AppColors.onPrimary),
+                                          ),
+                                  )
+                                else
+                                  FilledButton(
+                                    onPressed: _loading ? null : _signIn,
+                                    style: FilledButton.styleFrom(
+                                      backgroundColor: AppColors.primary,
+                                      foregroundColor: AppColors.onPrimary,
+                                      minimumSize: const Size.fromHeight(52),
+                                      shape: RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.circular(14)),
                                     ),
-                                    const SizedBox(width: 10),
-                                    Expanded(
-                                      child: _RoleSignInButton(
-                                        isCupertino: isCupertino,
-                                        onPressed: () => _signIn(asClient: false),
-                                        backgroundColor: AppColors.secondary,
-                                        foregroundColor: AppColors.onPrimary,
-                                        icon: isCupertino ? CupertinoIcons.leaf_arrow_circlepath : Icons.eco_rounded,
-                                        label: 'Sign In Gardener',
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                                const SizedBox(height: 6),
-                                Text(
-                                  'Selecciona el perfil per entrar al prototip',
-                                  textAlign: TextAlign.center,
-                                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(fontSize: 12),
-                                ),
+                                    child: _loading
+                                        ? const SizedBox(
+                                            height: 20,
+                                            width: 20,
+                                            child: CircularProgressIndicator(
+                                                strokeWidth: 2, color: Colors.white),
+                                          )
+                                        : Text(
+                                            'Entrar',
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .labelMedium
+                                                ?.copyWith(color: AppColors.onPrimary),
+                                          ),
+                                  ),
                                 const SizedBox(height: 8),
                                 Text(
                                   'New to GAPP? Sign up',
@@ -291,36 +295,3 @@ class _LabeledField extends StatelessWidget {
   }
 }
 
-class _RoleSignInButton extends StatelessWidget {
-  const _RoleSignInButton({
-    required this.isCupertino, required this.onPressed, required this.backgroundColor,
-    required this.foregroundColor, required this.icon, required this.label,
-  });
-  final bool isCupertino; final VoidCallback onPressed; final Color backgroundColor;
-  final Color foregroundColor; final IconData icon; final String label;
-
-  @override
-  Widget build(BuildContext context) {
-    if (isCupertino) {
-      return CupertinoButton(
-        onPressed: onPressed, color: backgroundColor, borderRadius: BorderRadius.circular(14),
-        padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 10),
-        child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-          Icon(icon, color: foregroundColor, size: 18), const SizedBox(width: 8),
-          Flexible(child: Text(label, overflow: TextOverflow.ellipsis,
-              style: Theme.of(context).textTheme.labelMedium?.copyWith(color: foregroundColor))),
-        ]),
-      );
-    }
-    return FilledButton.icon(
-      onPressed: onPressed,
-      style: FilledButton.styleFrom(
-        backgroundColor: backgroundColor, foregroundColor: foregroundColor,
-        minimumSize: const Size.fromHeight(52),
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
-      ),
-      icon: Icon(icon),
-      label: Text(label, style: Theme.of(context).textTheme.labelMedium?.copyWith(color: foregroundColor)),
-    );
-  }
-}

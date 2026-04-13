@@ -1,3 +1,7 @@
+import 'dart:io';
+import 'dart:typed_data';
+
+import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import '../../../core/errors/app_error.dart';
 import '../domain/client_visits_data.dart';
@@ -179,7 +183,8 @@ class SupabaseVisitsRepository extends VisitsRepository {
 
   @override
   Future<ActiveVisitSnapshot?> loadActiveVisit() async {
-    if (_activeVisit != null) return _activeVisit;
+    // Do not short-circuit from cache: always fetch fresh data so that
+    // photos and comments added since the last load are reflected in the UI.
 
     final gardenerId = await _getGardenerProfileId();
     if (gardenerId == null) return null;
@@ -194,17 +199,10 @@ class SupabaseVisitsRepository extends VisitsRepository {
     if (data == null) return null;
 
     final garden = data['gardens'] as Map<String, dynamic>;
-    final photos = (data['visit_photos'] as List? ?? [])
-        .map((p) => LocalVisitPhoto(
-              id: p['id'] as String,
-              localPath: p['storage_path'] as String? ?? '',
-              thumbnailPath: p['thumbnail_path'] as String? ?? '',
-              label: p['label'] as String? ?? '',
-              createdAt: DateTime.tryParse(p['created_at'] as String? ?? ''),
-            ))
-        .toList();
+    final photos = await _resolvePhotoUrls(data['visit_photos'] as List? ?? []);
 
     _activeVisit = ActiveVisitSnapshot(
+      id: data['id'] as String,
       garden: AssignedGardenVisitStatus(
         id: garden['id'] as String,
         gardenName: garden['name'] as String,
@@ -266,6 +264,7 @@ class SupabaseVisitsRepository extends VisitsRepository {
     }).select().single();
 
     _activeVisit = ActiveVisitSnapshot(
+      id: visit['id'] as String,
       garden: AssignedGardenVisitStatus(
         id: garden['id'] as String,
         gardenName: garden['name'] as String,
@@ -288,26 +287,18 @@ class SupabaseVisitsRepository extends VisitsRepository {
 
   @override
   Future<void> closeActiveVisit() async {
-    if (_activeVisit == null) return;
-
     final gardenerId = await _getGardenerProfileId();
+    if (gardenerId == null) return;
+
     final now = DateTime.now().toUtc().toIso8601String();
 
     await _client
         .from('visits')
         .update({'status': 'CLOSED', 'ended_at': now})
-        .eq('gardener_id', gardenerId!)
+        .eq('gardener_id', gardenerId)
         .eq('status', 'ACTIVE');
 
-    _activeVisit = ActiveVisitSnapshot(
-      garden: _activeVisit!.garden,
-      startedAt: _activeVisit!.startedAt,
-      endedAt: DateTime.now(),
-      isVerified: _activeVisit!.isVerified,
-      initiationMethod: _activeVisit!.initiationMethod,
-      photos: _activeVisit!.photos,
-      publicComment: _activeVisit!.publicComment,
-    );
+    _activeVisit = null;
   }
 
   @override
@@ -316,8 +307,91 @@ class SupabaseVisitsRepository extends VisitsRepository {
     required String localPath,
     required String thumbnailPath,
   }) async {
-    // TODO: Upload to Supabase Storage and save path
-    // For now just store the reference
+    if (_activeVisit == null) throw const VisitNotFoundError();
+
+    final gardenerId = await _getGardenerProfileId();
+    if (gardenerId == null) throw const VisitNotFoundError();
+
+    // Find the active visit id
+    final visitData = await _client
+        .from('visits')
+        .select('id')
+        .eq('gardener_id', gardenerId)
+        .eq('status', 'ACTIVE')
+        .maybeSingle();
+    if (visitData == null) throw const VisitNotFoundError();
+    final visitId = visitData['id'] as String;
+
+    // Compress and upload both full and thumbnail versions
+    final ts = DateTime.now().millisecondsSinceEpoch;
+    final fullPath = 'visits/$visitId/full_$ts.jpg';
+    final thumbPath = 'visits/$visitId/thumb_$ts.jpg';
+
+    final rawBytes = await File(localPath).readAsBytes();
+    Uint8List fullBytes;
+    Uint8List thumbBytes;
+    try {
+      fullBytes = await FlutterImageCompress.compressWithFile(
+            localPath,
+            minWidth: 1280,
+            minHeight: 1280,
+            quality: 80,
+            keepExif: false,
+          ) ??
+          rawBytes;
+      thumbBytes = await FlutterImageCompress.compressWithFile(
+            localPath,
+            minWidth: 400,
+            minHeight: 400,
+            quality: 65,
+            keepExif: false,
+          ) ??
+          rawBytes;
+    } catch (_) {
+      // Compression not available (simulator / plugin not registered) — upload original.
+      fullBytes = rawBytes;
+      thumbBytes = rawBytes;
+    }
+
+    await Future.wait([
+      _client.storage.from('visit-photos').uploadBinary(
+        fullPath,
+        fullBytes,
+        fileOptions: const FileOptions(contentType: 'image/jpeg', upsert: false),
+      ),
+      _client.storage.from('visit-photos').uploadBinary(
+        thumbPath,
+        thumbBytes,
+        fileOptions: const FileOptions(contentType: 'image/jpeg', upsert: false),
+      ),
+    ]);
+
+    // Insert photo record
+    final photo = await _client.from('visit_photos').insert({
+      'visit_id': visitId,
+      'storage_path': fullPath,
+      'thumbnail_path': thumbPath,
+      'label': photoLabel,
+    }).select().single();
+
+    // Update in-memory cache — use local path so the thumbnail renders instantly
+    // without a network round-trip (the file is still on disk at this point).
+    final newPhoto = LocalVisitPhoto(
+      id: photo['id'] as String,
+      localPath: localPath,
+      thumbnailPath: localPath,
+      label: photoLabel,
+      createdAt: DateTime.now(),
+    );
+    _activeVisit = ActiveVisitSnapshot(
+      garden: _activeVisit!.garden,
+      startedAt: _activeVisit!.startedAt,
+      endedAt: _activeVisit!.endedAt,
+      isVerified: _activeVisit!.isVerified,
+      initiationMethod: _activeVisit!.initiationMethod,
+      photos: [..._activeVisit!.photos, newPhoto],
+      publicComment: _activeVisit!.publicComment,
+    );
   }
 
   @override
@@ -382,6 +456,7 @@ class SupabaseVisitsRepository extends VisitsRepository {
         .single();
 
     final garden = v['gardens'] as Map<String, dynamic>;
+    final photos = await _resolvePhotoUrls(v['visit_photos'] as List? ?? []);
     _activeVisit = ActiveVisitSnapshot(
       garden: AssignedGardenVisitStatus(
         id: garden['id'] as String,
@@ -399,6 +474,7 @@ class SupabaseVisitsRepository extends VisitsRepository {
       initiationMethod: v['initiation_method'] == 'QR_SCAN'
           ? VisitInitiationMethod.qrScan
           : VisitInitiationMethod.manual,
+      photos: photos,
       publicComment: v['public_comment'] as String? ?? '',
     );
     return _activeVisit!;
@@ -443,6 +519,80 @@ class SupabaseVisitsRepository extends VisitsRepository {
     return gardens.map((g) => ManualStartCandidate(garden: g, distanceMeters: 0)).toList();
   }
 
+  @override
+  Future<List<VisitLocationPoint>> loadVisitLocationPoints(String visitId) async {
+    final rows = await _client
+        .from('visit_location_points')
+        .select('visit_id, lat, lng, accuracy, recorded_at')
+        .eq('visit_id', visitId)
+        .order('recorded_at');
+    return (rows as List).map((r) => VisitLocationPoint(
+      visitId: r['visit_id'] as String,
+      lat: (r['lat'] as num).toDouble(),
+      lng: (r['lng'] as num).toDouble(),
+      accuracy: (r['accuracy'] as num?)?.toDouble(),
+      recordedAt: DateTime.parse(r['recorded_at'] as String),
+    )).toList();
+  }
+
+  @override
+  Future<void> recordLocationPoint({
+    required String visitId,
+    required double lat,
+    required double lng,
+    double? accuracy,
+  }) async {
+    await _client.from('visit_location_points').insert({
+      'visit_id': visitId,
+      'lat': lat,
+      'lng': lng,
+      'accuracy': accuracy,
+    });
+  }
+
+  /// Resolves a list of visit_photos DB rows into [LocalVisitPhoto] objects
+  /// with signed URLs valid for 1 hour. Uses a batch call to minimise round-trips.
+  Future<List<LocalVisitPhoto>> _resolvePhotoUrls(List<dynamic> rows) async {
+    if (rows.isEmpty) return [];
+
+    // Collect the unique storage paths that need signing.
+    final storagePaths = rows.map((p) => p['storage_path'] as String? ?? '').toList();
+    final thumbPaths = rows.map((p) => p['thumbnail_path'] as String? ?? '').toList();
+
+    final allPaths = {...storagePaths, ...thumbPaths}
+        .where((p) => p.isNotEmpty && !p.startsWith('http'))
+        .toList();
+
+    // Batch-sign in one request.
+    final Map<String, String> urlMap = {};
+    if (allPaths.isNotEmpty) {
+      final signed = await _client.storage
+          .from('visit-photos')
+          .createSignedUrls(allPaths, 3600);
+      for (final item in signed) {
+        urlMap[item.path] = item.signedUrl;
+      }
+    }
+
+    String resolve(String path) {
+      if (path.isEmpty) return '';
+      if (path.startsWith('http')) return path; // already a URL (e.g. local file was cached)
+      return urlMap[path] ?? path;
+    }
+
+    return rows.asMap().entries.map((entry) {
+      final i = entry.key;
+      final p = entry.value;
+      return LocalVisitPhoto(
+        id: p['id'] as String,
+        localPath: resolve(storagePaths[i]),
+        thumbnailPath: resolve(thumbPaths[i]),
+        label: p['label'] as String? ?? '',
+        createdAt: DateTime.tryParse(p['created_at'] as String? ?? ''),
+      );
+    }).toList();
+  }
+
   // --- Helpers ---
   String _monthLabel(int month) {
     const months = ['', 'JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'];
@@ -459,5 +609,52 @@ class SupabaseVisitsRepository extends VisitsRepository {
     final m = (d.inMinutes % 60).toString().padLeft(2, '0');
     final s = (d.inSeconds % 60).toString().padLeft(2, '0');
     return '$h:$m:$s';
+  }
+
+  @override
+  Future<ActiveClientVisitInfo?> loadActiveVisitForClient() async {
+    final clientId = await _getClientProfileId();
+    if (clientId == null) return null;
+
+    // Get this client's garden IDs
+    final gardens = await _client
+        .from('gardens')
+        .select('id')
+        .eq('client_id', clientId);
+    final gardenIds = (gardens as List).map((g) => g['id'] as String).toList();
+    if (gardenIds.isEmpty) return null;
+
+    // Find active visit in those gardens
+    final visitData = await _client
+        .from('visits')
+        .select('id, started_at, gardener_id')
+        .eq('status', 'ACTIVE')
+        .inFilter('garden_id', gardenIds)
+        .maybeSingle();
+    if (visitData == null) return null;
+
+    // Resolve gardener display name via gardener_profiles → user_profiles
+    final gardenerId = visitData['gardener_id'] as String;
+    final gardenerProfile = await _client
+        .from('gardener_profiles')
+        .select('user_id')
+        .eq('id', gardenerId)
+        .maybeSingle();
+
+    String gardenerName = 'Jardinero';
+    if (gardenerProfile != null) {
+      final userProfile = await _client
+          .from('user_profiles')
+          .select('display_name')
+          .eq('id', gardenerProfile['user_id'] as String)
+          .maybeSingle();
+      gardenerName = userProfile?['display_name'] as String? ?? gardenerName;
+    }
+
+    return ActiveClientVisitInfo(
+      visitId: visitData['id'] as String,
+      gardenerName: gardenerName,
+      startedAt: DateTime.parse(visitData['started_at'] as String),
+    );
   }
 }

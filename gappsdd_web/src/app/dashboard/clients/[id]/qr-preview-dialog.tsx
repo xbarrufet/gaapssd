@@ -43,7 +43,7 @@ export function QrPreviewDialog({
             ref={qrRef}
             value={gardenId}
             size={280}
-            logoImage="/logo.png"
+            logoImage="/logo.svg"
             logoWidth={60}
             logoHeight={60}
             logoPadding={4}

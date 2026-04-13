@@ -1,27 +1,48 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Users, Flower2, UserCircle, CalendarCheck } from "lucide-react";
 import { createClient } from "@/lib/supabase/server";
+import { getCurrentUser, isSuperAdmin } from "@/lib/auth";
 
-async function getStats() {
+async function getStats(companyId: string | null, superAdmin: boolean) {
   const supabase = await createClient();
 
-  const [users, gardeners, clients, visits] = await Promise.all([
-    supabase.from("user_profiles").select("*", { count: "exact", head: true }),
-    supabase.from("gardener_profiles").select("*", { count: "exact", head: true }),
-    supabase.from("client_profiles").select("*", { count: "exact", head: true }),
-    supabase.from("visits").select("*", { count: "exact", head: true }),
+  if (superAdmin) {
+    const [users, gardeners, clients, visits] = await Promise.all([
+      supabase.from("user_profiles").select("*", { count: "exact", head: true }),
+      supabase.from("gardener_profiles").select("*", { count: "exact", head: true }),
+      supabase.from("client_profiles").select("*", { count: "exact", head: true }),
+      supabase.from("visits").select("*", { count: "exact", head: true }),
+    ]);
+
+    return [
+      { title: "Usuarios", value: String(users.count ?? 0), icon: Users, description: "Total plataforma" },
+      { title: "Jardineros", value: String(gardeners.count ?? 0), icon: Flower2, description: "Total plataforma" },
+      { title: "Clientes", value: String(clients.count ?? 0), icon: UserCircle, description: "Total plataforma" },
+      { title: "Visitas", value: String(visits.count ?? 0), icon: CalendarCheck, description: "Total" },
+    ];
+  }
+
+  // Company-admin: filter by company via RLS (server will enforce it automatically)
+  const [gardeners, visits] = await Promise.all([
+    supabase
+      .from("user_profiles")
+      .select("*", { count: "exact", head: true })
+      .eq("role", "GARDENER"),
+    supabase
+      .from("visits")
+      .select("*", { count: "exact", head: true }),
   ]);
 
   return [
-    { title: "Usuarios", value: String(users.count ?? 0), icon: Users, description: "Registrados" },
-    { title: "Jardineros", value: String(gardeners.count ?? 0), icon: Flower2, description: "Registrados" },
-    { title: "Clientes", value: String(clients.count ?? 0), icon: UserCircle, description: "Registrados" },
-    { title: "Visitas", value: String(visits.count ?? 0), icon: CalendarCheck, description: "Total" },
+    { title: "Jardineros", value: String(gardeners.count ?? 0), icon: Flower2, description: "Tu empresa" },
+    { title: "Visitas", value: String(visits.count ?? 0), icon: CalendarCheck, description: "Tu empresa" },
   ];
 }
 
 export default async function DashboardPage() {
-  const stats = await getStats();
+  const user = await getCurrentUser();
+  const superAdmin = isSuperAdmin(user);
+  const stats = await getStats(user?.companyId ?? null, superAdmin);
 
   return (
     <div className="space-y-6">
@@ -30,7 +51,9 @@ export default async function DashboardPage() {
           Dashboard
         </h1>
         <p className="text-muted-foreground">
-          Resumen general de la plataforma GAPP.
+          {superAdmin
+            ? "Resumen general de la plataforma GAPP."
+            : "Resumen de tu empresa."}
         </p>
       </div>
 

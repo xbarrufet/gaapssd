@@ -34,10 +34,30 @@ abstract class VisitsRepository {
     required DateTime newEndTime,
   });
 
+  // Location tracking (heatmap data collection)
+  Future<void> recordLocationPoint({
+    required String visitId,
+    required double lat,
+    required double lng,
+    double? accuracy,
+  });
+
+  Future<List<VisitLocationPoint>> loadVisitLocationPoints(String visitId);
+
+  /// Returns the active visit in any of the client's gardens, or null if none.
+  Future<ActiveClientVisitInfo?> loadActiveVisitForClient();
+
   Future<ClientVisitsData> loadClientVisitsData() async {
-    final profile = await loadClientProfile();
-    final visits = await loadCompletedVisits();
-    return ClientVisitsData(profile: profile, visits: visits);
+    final results = await Future.wait([
+      loadClientProfile(),
+      loadCompletedVisits(),
+      loadActiveVisitForClient(),
+    ]);
+    return ClientVisitsData(
+      profile: results[0] as ClientProfile,
+      visits: results[1] as List<VisitSummary>,
+      activeVisit: results[2] as ActiveClientVisitInfo?,
+    );
   }
 }
 
@@ -507,6 +527,47 @@ class FakeVisitsRepository extends VisitsRepository {
         );
       }
     });
+  }
+
+  @override
+  Future<ActiveClientVisitInfo?> loadActiveVisitForClient() {
+    return Future.value(null);
+  }
+
+  @override
+  Future<void> recordLocationPoint({
+    required String visitId,
+    required double lat,
+    required double lng,
+    double? accuracy,
+  }) async {}
+
+  @override
+  Future<List<VisitLocationPoint>> loadVisitLocationPoints(String visitId) async {
+    // Fake cluster around a Barcelona garden (41.3851° N, 2.1734° E)
+    final base = DateTime(2026, 4, 8, 9, 12);
+    final offsets = [
+      (dlat: 0.0000, dlng: 0.0000),
+      (dlat: 0.0001, dlng: 0.0001),
+      (dlat: 0.0002, dlng: 0.0000),
+      (dlat: 0.0001, dlng: -0.0001),
+      (dlat: 0.0003, dlng: 0.0002),
+      (dlat: 0.0001, dlng: 0.0003),
+      (dlat: 0.0001, dlng: 0.0001), // duplicate → higher density
+      (dlat: 0.0001, dlng: 0.0001),
+      (dlat: 0.0004, dlng: 0.0004),
+      (dlat: -0.0001, dlng: 0.0001),
+    ];
+    return offsets.indexed.map((entry) {
+      final (i, o) = entry;
+      return VisitLocationPoint(
+        visitId: visitId,
+        lat: 41.3851 + o.dlat,
+        lng: 2.1734 + o.dlng,
+        accuracy: 5.0,
+        recordedAt: base.add(Duration(seconds: i * 30)),
+      );
+    }).toList();
   }
 
   void _ensureNoActiveVisit() {

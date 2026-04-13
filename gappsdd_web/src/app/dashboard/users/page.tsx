@@ -1,12 +1,16 @@
 import { type ColumnDef } from "@tanstack/react-table";
 import Link from "next/link";
 import { Plus, Pencil } from "lucide-react";
+import { redirect } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { getUsers } from "./actions";
 import { UsersTable } from "./users-table";
+import { getCurrentUser, isSuperAdmin } from "@/lib/auth";
 
 const roleLabels: Record<string, string> = {
+  SUPER_ADMIN: "Super Admin",
+  COMPANY_ADMIN: "Admin Empresa",
   ADMIN: "Admin",
   GARDENER: "Jardinero",
   CLIENT: "Cliente",
@@ -14,6 +18,8 @@ const roleLabels: Record<string, string> = {
 };
 
 const roleVariants: Record<string, "default" | "secondary" | "outline"> = {
+  SUPER_ADMIN: "default",
+  COMPANY_ADMIN: "default",
   ADMIN: "default",
   GARDENER: "secondary",
   CLIENT: "outline",
@@ -21,6 +27,9 @@ const roleVariants: Record<string, "default" | "secondary" | "outline"> = {
 };
 
 export default async function UsersPage() {
+  const user = await getCurrentUser();
+  if (!isSuperAdmin(user)) redirect("/dashboard");
+
   const users = await getUsers();
 
   return (

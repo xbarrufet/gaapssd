@@ -18,7 +18,7 @@ export default async function ClientsPage() {
             Gestión de clientes y sus jardines.
           </p>
         </div>
-        <Link href="/dashboard/users/new">
+        <Link href="/dashboard/clients/new">
           <Button>
             <Plus className="mr-2 h-4 w-4" />
             Nuevo Cliente

@@ -4,30 +4,44 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../app/providers.dart';
+import '../../../app/router.dart';
 import '../../../app/theme/app_theme.dart';
 import '../../auth/domain/auth_state.dart';
 import '../../chat/domain/chat_models.dart';
 import '../../chat/presentation/chat_with_request_modes_screen.dart';
 import '../domain/client_visits_data.dart';
 
-class VisitReportScreen extends ConsumerWidget {
+class VisitReportScreen extends ConsumerStatefulWidget {
   const VisitReportScreen({
     super.key,
-    required this.visit,
+    required this.visitId,
   });
 
-  final VisitSummary visit;
-
-  bool _isCupertino(BuildContext context) => Theme.of(context).platform == TargetPlatform.iOS;
+  final String visitId;
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final isCupertino = _isCupertino(context);
+  ConsumerState<VisitReportScreen> createState() => _VisitReportScreenState();
+}
+
+class _VisitReportScreenState extends ConsumerState<VisitReportScreen> {
+  late Future<VisitReport> _future;
+
+  bool get _isCupertino => Theme.of(context).platform == TargetPlatform.iOS;
+
+  @override
+  void initState() {
+    super.initState();
+    _future = ref.read(visitsRepositoryProvider).loadVisitReport(widget.visitId);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final isCupertino = _isCupertino;
 
     return Scaffold(
       body: SafeArea(
         child: FutureBuilder<VisitReport>(
-          future: ref.read(visitsRepositoryProvider).loadVisitReport(visit.id),
+          future: _future,
           builder: (context, snapshot) {
             if (snapshot.connectionState != ConnectionState.done) {
               return const Center(
@@ -114,6 +128,20 @@ class VisitReportScreen extends ConsumerWidget {
                         child: _CommentsCard(comment: report.publicComment),
                       ),
                     ),
+                  SliverToBoxAdapter(
+                    child: Padding(
+                      padding: const EdgeInsets.fromLTRB(16, 14, 16, 0),
+                      child: SizedBox(
+                        width: double.infinity,
+                        child: OutlinedButton.icon(
+                          onPressed: () =>
+                              context.push(AppRoutes.visitHeatmap, extra: widget.visitId),
+                          icon: const Icon(Icons.map_outlined),
+                          label: const Text('Mapa de Actividad'),
+                        ),
+                      ),
+                    ),
+                  ),
                   SliverToBoxAdapter(
                     child: Padding(
                       padding: const EdgeInsets.fromLTRB(16, 14, 16, 10),

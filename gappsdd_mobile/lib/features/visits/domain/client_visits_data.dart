@@ -200,6 +200,7 @@ class ManualStartCandidate {
 
 class ActiveVisitSnapshot {
   const ActiveVisitSnapshot({
+    this.id,
     required this.garden,
     required this.startedAt,
     required this.endedAt,
@@ -209,6 +210,8 @@ class ActiveVisitSnapshot {
     this.publicComment = '',
   });
 
+  /// Supabase visit row ID — null when using the SQLite or Fake repository.
+  final String? id;
   final AssignedGardenVisitStatus garden;
   final DateTime startedAt;
   final DateTime? endedAt; // NULL if active, set if closed
@@ -226,9 +229,44 @@ class ActiveVisitSnapshot {
   bool get isActive => endedAt == null;
 }
 
+/// Info shown in the "Visita en Curso" banner on the client visits screen.
+class ActiveClientVisitInfo {
+  const ActiveClientVisitInfo({
+    required this.visitId,
+    required this.gardenerName,
+    required this.startedAt,
+  });
+
+  final String visitId;
+  final String gardenerName;
+  final DateTime startedAt;
+}
+
 class ClientVisitsData {
-  const ClientVisitsData({required this.profile, required this.visits});
+  const ClientVisitsData({
+    required this.profile,
+    required this.visits,
+    this.activeVisit,
+  });
 
   final ClientProfile profile;
   final List<VisitSummary> visits;
+  final ActiveClientVisitInfo? activeVisit;
+}
+
+/// A single GPS reading recorded during an active visit for heatmap generation.
+class VisitLocationPoint {
+  const VisitLocationPoint({
+    required this.visitId,
+    required this.lat,
+    required this.lng,
+    this.accuracy,
+    required this.recordedAt,
+  });
+
+  final String visitId;
+  final double lat;
+  final double lng;
+  final double? accuracy; // metres
+  final DateTime recordedAt;
 }

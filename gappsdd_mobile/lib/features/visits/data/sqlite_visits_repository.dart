@@ -800,4 +800,24 @@ class SqliteVisitsRepository extends VisitsRepository {
       whereArgs: [currentId],
     );
   }
+
+  @override
+  Future<ActiveClientVisitInfo?> loadActiveVisitForClient() async {
+    // Client visits always load from Supabase when authenticated.
+    // SQLite does not store client-side active visit info.
+    return null;
+  }
+
+  @override
+  Future<void> recordLocationPoint({
+    required String visitId,
+    required double lat,
+    required double lng,
+    double? accuracy,
+  }) async {
+    // Location points are stored in Supabase only.
+  }
+
+  @override
+  Future<List<VisitLocationPoint>> loadVisitLocationPoints(String visitId) async => [];
 }

@@ -1,6 +1,7 @@
 "use server";
 
-import { createClient } from "@/lib/supabase/server";
+import { createClient, createAdminClient } from "@/lib/supabase/server";
+import { getCurrentUser } from "@/lib/auth";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 
@@ -12,7 +13,6 @@ export async function getClients() {
     .order("created_at", { ascending: false });
 
   if (error) {
-    // Fallback without gardens
     const { data: simple, error: simpleError } = await supabase
       .from("client_profiles")
       .select("*")
@@ -37,18 +37,23 @@ export async function getClient(id: string) {
 
 export async function getClientGardens(clientId: string) {
   const supabase = await createClient();
-  const { data, error } = await supabase
+  const user = await getCurrentUser();
+
+  let query = supabase
     .from("gardens")
     .select("*, garden_assignments(id, gardener_id, is_active, gardener_profiles(id, display_name))")
     .eq("client_id", clientId)
     .order("created_at", { ascending: false });
 
+  // RLS handles company isolation; no explicit filter needed
+  const { data, error } = await query;
   if (error) throw error;
   return data;
 }
 
 export async function getAllGardeners() {
   const supabase = await createClient();
+  // RLS automatically filters to company scope for COMPANY_ADMIN
   const { data, error } = await supabase
     .from("gardener_profiles")
     .select("id, display_name")
@@ -58,6 +63,34 @@ export async function getAllGardeners() {
   return data;
 }
 
+export async function createClientUser(formData: FormData) {
+  const email = formData.get("email") as string;
+  const displayName = formData.get("name") as string;
+  const phone = (formData.get("phone") as string) || null;
+  const password = formData.get("password") as string;
+
+  // Clients are global — no company_id
+  const supabase = await createAdminClient();
+  const { data: authData, error: authError } = await supabase.auth.admin.createUser({
+    email,
+    password,
+    email_confirm: true,
+    user_metadata: { display_name: displayName, role: "CLIENT" },
+  });
+
+  if (authError) throw authError;
+
+  // Ensure client_profile exists (trigger creates user_profiles; client_profile is separate)
+  const { error: profileError } = await supabase
+    .from("client_profiles")
+    .insert({ user_id: authData.user.id, display_name: displayName, phone });
+
+  if (profileError) throw profileError;
+
+  revalidatePath("/dashboard/clients");
+  redirect("/dashboard/clients");
+}
+
 export async function createGarden(clientId: string, formData: FormData) {
   const name = formData.get("name") as string;
   const address = formData.get("address") as string;
@@ -65,9 +98,13 @@ export async function createGarden(clientId: string, formData: FormData) {
   const lngStr = formData.get("longitude") as string;
   const gardenerId = formData.get("gardener_id") as string;
 
+  const user = await getCurrentUser();
+  if (!user?.companyId) throw new Error("No se puede crear un jardín sin empresa asignada.");
+
   const supabase = await createClient();
   const { data: garden, error } = await supabase.from("gardens").insert({
     client_id: clientId,
+    company_id: user.companyId,
     name,
     address,
     latitude: latStr ? parseFloat(latStr) : null,
@@ -107,7 +144,6 @@ export async function updateGarden(gardenId: string, clientId: string, formData:
 
   if (error) throw error;
 
-  // Deactivate previous assignment and create new one if gardener changed
   if (gardenerId) {
     await supabase
       .from("garden_assignments")

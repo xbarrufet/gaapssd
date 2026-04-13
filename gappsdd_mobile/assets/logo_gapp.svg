@@ -1,0 +1,20 @@
+<svg width="500" height="600" viewBox="0 0 500 600" fill="none" xmlns="http://www.w3.org/2000/svg">
+  
+  <defs>
+    <mask id="nervaduraMask">
+      <rect x="0" y="0" width="500" height="600" fill="white" />
+      
+      <path d="M145 330C145 250 190 180 280 65" stroke="black" stroke-width="12" stroke-linecap="round" fill="none"/>
+    </mask>
+  </defs>
+
+  <g id="Logo_GAPP_NervaduraTransparente">
+    <path d="M281.5 240H370V305C370 373.482 314.482 429 246 429C177.518 429 122 373.482 122 305C122 268.411 137.85 235.524 163.142 212.75" stroke="#335B42" stroke-width="24" stroke-linecap="round" stroke-linejoin="round"/>
+    
+    <path d="M205 320L245 360L325 260" stroke="#335B42" stroke-width="24" stroke-linecap="round" stroke-linejoin="round"/>
+    
+    <path d="M235 225C140 225 110 110 280 65C340 150 320 225 235 225Z" fill="#335B42" mask="url(#nervaduraMask)"/>
+  </g>
+
+  <text x="250" y="550" text-anchor="middle" font-family="Arial, sans-serif" font-weight="bold" font-size="110" fill="#335B42" letter-spacing="2">GAPP</text>
+</svg>

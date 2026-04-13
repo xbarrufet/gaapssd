@@ -7,21 +7,38 @@ import 'package:go_router/go_router.dart';
 import '../../../app/providers.dart';
 import '../../../app/router.dart';
 import '../../../app/theme/app_theme.dart';
+import '../../../app/widgets/profile_menu.dart';
 import '../domain/client_visits_data.dart';
 
-class ClientVisitsScreen extends ConsumerWidget {
+class ClientVisitsScreen extends ConsumerStatefulWidget {
   const ClientVisitsScreen({super.key});
 
+  @override
+  ConsumerState<ClientVisitsScreen> createState() => _ClientVisitsScreenState();
+}
+
+class _ClientVisitsScreenState extends ConsumerState<ClientVisitsScreen> {
   bool _isCupertino(BuildContext context) => Theme.of(context).platform == TargetPlatform.iOS;
+  late Future<ClientVisitsData> _future;
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  void initState() {
+    super.initState();
+    _future = ref.read(visitsRepositoryProvider).loadClientVisitsData();
+    // Request push notification permission when the client enters their visits screen.
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      ref.read(notificationServiceProvider).requestPermission();
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final isCupertino = _isCupertino(context);
 
     return Scaffold(
       body: SafeArea(
         child: FutureBuilder<ClientVisitsData>(
-          future: ref.read(visitsRepositoryProvider).loadClientVisitsData(),
+          future: _future,
           builder: (context, snapshot) {
             if (snapshot.connectionState != ConnectionState.done) {
               return const Center(
@@ -69,6 +86,13 @@ class ClientVisitsScreen extends ConsumerWidget {
                       child: _HeroCard(profile: data.profile),
                     ),
                   ),
+                  if (data.activeVisit != null)
+                    SliverToBoxAdapter(
+                      child: Padding(
+                        padding: const EdgeInsets.fromLTRB(16, 0, 16, 8),
+                        child: _ActiveVisitBanner(info: data.activeVisit!),
+                      ),
+                    ),
                   SliverPadding(
                     padding: const EdgeInsets.fromLTRB(16, 8, 16, 120),
                     sliver: SliverList.separated(
@@ -100,55 +124,15 @@ class _TopBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isCupertino = Theme.of(context).platform == TargetPlatform.iOS;
-
     return Row(
       children: [
-        Container(
-          width: 44,
-          height: 44,
-          clipBehavior: Clip.antiAlias,
-          decoration: const BoxDecoration(
-            color: AppColors.surfaceHigh,
-            shape: BoxShape.circle,
-          ),
-          child: Image.network(
-            profile.gardenerAvatarUrl,
-            fit: BoxFit.cover,
-            errorBuilder: (_, _, _) => Icon(
-              isCupertino ? CupertinoIcons.person_fill : Icons.person_rounded,
-              color: AppColors.primary,
-            ),
-          ),
-        ),
-        const SizedBox(width: 12),
         Expanded(
           child: Text(
             profile.appTitle,
             style: Theme.of(context).textTheme.headlineMedium,
           ),
         ),
-        DecoratedBox(
-          decoration: BoxDecoration(
-            color: AppColors.surface.withValues(alpha: 0.82),
-            borderRadius: BorderRadius.circular(18),
-            boxShadow: const [
-              BoxShadow(
-                color: Color(0x140F120C),
-                blurRadius: 18,
-                spreadRadius: -6,
-                offset: Offset(0, 6),
-              ),
-            ],
-          ),
-          child: IconButton(
-            onPressed: null,
-            icon: Icon(
-              isCupertino ? CupertinoIcons.bell : Icons.notifications_none_rounded,
-            ),
-            color: AppColors.primary,
-          ),
-        ),
+        ProfileAvatarButton(displayName: profile.clientName),
       ],
     );
   }
@@ -334,7 +318,7 @@ class _VisitCard extends StatelessWidget {
                             label: 'View Details',
                             onTap: () {
                               HapticFeedback.lightImpact();
-                              context.push(AppRoutes.clientVisitReport, extra: visit);
+                              context.push(AppRoutes.clientVisitReport, extra: visit.id);
                             },
                           ),
                         ],
@@ -383,6 +367,61 @@ class _StatusBadge extends StatelessWidget {
                   color: foreground,
                   fontSize: 9,
                 ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _ActiveVisitBanner extends StatelessWidget {
+  const _ActiveVisitBanner({required this.info});
+
+  final ActiveClientVisitInfo info;
+
+  @override
+  Widget build(BuildContext context) {
+    final hh = info.startedAt.hour.toString().padLeft(2, '0');
+    final mm = info.startedAt.minute.toString().padLeft(2, '0');
+
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+      decoration: BoxDecoration(
+        color: AppColors.primary.withValues(alpha: 0.10),
+        borderRadius: BorderRadius.circular(24),
+        border: Border.all(
+          color: AppColors.primary.withValues(alpha: 0.30),
+        ),
+      ),
+      child: Row(
+        children: [
+          Container(
+            width: 10,
+            height: 10,
+            decoration: const BoxDecoration(
+              color: AppColors.primary,
+              shape: BoxShape.circle,
+            ),
+          ),
+          const SizedBox(width: 14),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'Visita en Curso',
+                  style: Theme.of(context).textTheme.titleSmall?.copyWith(
+                        color: AppColors.primary,
+                        fontWeight: FontWeight.w700,
+                      ),
+                ),
+                const SizedBox(height: 2),
+                Text(
+                  'Desde las $hh:$mm · ${info.gardenerName}',
+                  style: Theme.of(context).textTheme.bodySmall,
+                ),
+              ],
+            ),
           ),
         ],
       ),

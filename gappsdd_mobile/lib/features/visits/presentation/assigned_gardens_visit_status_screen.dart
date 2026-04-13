@@ -21,14 +21,18 @@ class AssignedGardensVisitStatusScreen extends ConsumerStatefulWidget {
 }
 
 class _AssignedGardensVisitStatusScreenState extends ConsumerState<AssignedGardensVisitStatusScreen> {
-  int _refreshSeed = 0;
+  late Future<List<AssignedGardenVisitStatus>> _future;
+
+  @override
+  void initState() {
+    super.initState();
+    _future = ref.read(visitsRepositoryProvider).loadAssignedGardensVisitStatus();
+  }
 
   void _refreshAfterDetail() {
-    if (!mounted) {
-      return;
-    }
+    if (!mounted) return;
     setState(() {
-      _refreshSeed++;
+      _future = ref.read(visitsRepositoryProvider).loadAssignedGardensVisitStatus();
     });
   }
 
@@ -37,8 +41,7 @@ class _AssignedGardensVisitStatusScreenState extends ConsumerState<AssignedGarde
     return Scaffold(
       body: SafeArea(
         child: FutureBuilder<List<AssignedGardenVisitStatus>>(
-          key: ValueKey(_refreshSeed),
-          future: ref.read(visitsRepositoryProvider).loadAssignedGardensVisitStatus(),
+          future: _future,
           builder: (context, snapshot) {
             if (snapshot.connectionState != ConnectionState.done) {
               return const Center(

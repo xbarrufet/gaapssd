@@ -43,6 +43,18 @@ dependencies:
   uuid: ^4.0.0
   supabase_flutter: ^2.8.0
   flutter_dotenv: ^5.2.1
+  shared_preferences: ^2.3.0
+  flutter_native_splash: ^2.4.3
+  flutter_svg: ^2.2.4
+  firebase_core: ^3.6.0
+  firebase_messaging: ^15.1.3
+  flutter_local_notifications: ^17.2.2
+  mobile_scanner: ^6.0.0
+  image_picker: ^1.1.2
+  flutter_image_compress: ^2.3.0
+  geolocator: ^13.0.2
+  flutter_map: ^7.0.2
+  latlong2: ^0.9.1
 
 dev_dependencies:
   flutter_test:
@@ -54,6 +66,33 @@ dev_dependencies:
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
   flutter_lints: ^6.0.0
+  flutter_launcher_icons: ^0.14.3
+
+flutter_launcher_icons:
+  android: true
+  ios: true
+  image_path: "assets/icon_app.png"
+  remove_alpha_ios: true
+  adaptive_icon_background: "#FCF9F0"
+  adaptive_icon_foreground: "assets/icon_app.png"
+  web:
+    generate: false
+  macos:
+    generate: false
+  windows:
+    generate: false
+
+flutter_native_splash:
+  color: "#FCF9F0"
+  image: assets/icon_app.png
+  color_dark: "#1A1C16"
+  image_dark: assets/icon_app.png
+  android_12:
+    color: "#FCF9F0"
+    image: assets/icon_app.png
+    color_dark: "#1A1C16"
+    image_dark: assets/icon_app.png
+  web: false
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
@@ -68,6 +107,7 @@ flutter:
 
   assets:
     - .env
+    - assets/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images

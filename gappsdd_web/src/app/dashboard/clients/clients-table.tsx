@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { Fragment, useState } from "react";
 import {
   type ColumnDef,
   flexRender,
@@ -197,8 +197,8 @@ export function ClientsTable({ clients }: { clients: ClientProfile[] }) {
           <TableBody>
             {table.getRowModel().rows?.length ? (
               table.getRowModel().rows.map((row) => (
-                <>
-                  <TableRow key={row.id}>
+                <Fragment key={row.id}>
+                  <TableRow>
                     {row.getVisibleCells().map((cell) => (
                       <TableCell key={cell.id}>
                         {flexRender(
@@ -226,7 +226,7 @@ export function ClientsTable({ clients }: { clients: ClientProfile[] }) {
                       </TableCell>
                     </TableRow>
                   )}
-                </>
+                </Fragment>
               ))
             ) : (
               <TableRow>
