@@ -3,6 +3,7 @@
 import Image from "next/image";
 import {
   Building2,
+  CalendarClock,
   LayoutDashboard,
   Users,
   Flower2,
@@ -32,12 +33,14 @@ const superAdminItems = [
   { title: "Usuarios", href: "/dashboard/users", icon: Users },
   { title: "Jardineros", href: "/dashboard/gardeners", icon: Flower2 },
   { title: "Clientes", href: "/dashboard/clients", icon: UserCircle },
+  { title: "Visitas", href: "/dashboard/visits", icon: CalendarClock },
 ];
 
 const companyAdminItems = [
   { title: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
   { title: "Jardineros", href: "/dashboard/gardeners", icon: Flower2 },
   { title: "Clientes", href: "/dashboard/clients", icon: UserCircle },
+  { title: "Visitas", href: "/dashboard/visits", icon: CalendarClock },
 ];
 
 function getNavItems(role: UserRole | null) {
