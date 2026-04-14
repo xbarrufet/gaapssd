@@ -337,6 +337,12 @@ returns uuid as $$
   select id from public.client_profiles where user_id = auth.uid();
 $$ language sql security definer stable;
 
+-- Get company_id for a given garden (bypasses RLS to avoid policy recursion)
+create or replace function public.garden_company_id(p_garden_id uuid)
+returns uuid as $$
+  select company_id from public.gardens where id = p_garden_id;
+$$ language sql security definer stable;
+
 -- Kept for backward compat with any existing Edge Functions
 create or replace function public.is_admin()
 returns boolean as $$
@@ -470,11 +476,7 @@ create policy "Company-admins manage their assignments"
   on public.garden_assignments for all
   using (
     public.is_company_admin()
-    and exists (
-      select 1 from public.gardens g
-      where g.id = garden_assignments.garden_id
-        and g.company_id = public.my_company_id()
-    )
+    and public.garden_company_id(garden_assignments.garden_id) = public.my_company_id()
   );
 
 create policy "Gardeners see own assignments"

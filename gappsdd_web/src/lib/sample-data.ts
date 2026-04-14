@@ -1,12 +1,12 @@
 import type { User, Gardener, Client } from "@/types";
 
 export const sampleUsers: User[] = [
-  { id: "1", name: "Admin GAPP", email: "admin@gapp.es", role: "admin", createdAt: "2026-01-15" },
-  { id: "2", name: "Carlos Martínez", email: "carlos@gapp.es", role: "gardener", createdAt: "2026-02-01" },
-  { id: "3", name: "María López", email: "maria@gapp.es", role: "gardener", createdAt: "2026-02-10" },
-  { id: "4", name: "Ana García", email: "ana@cliente.es", role: "client", createdAt: "2026-03-01" },
-  { id: "5", name: "Pedro Sánchez", email: "pedro@cliente.es", role: "client", createdAt: "2026-03-05" },
-  { id: "6", name: "Laura Fernández", email: "laura@cliente.es", role: "client", createdAt: "2026-03-12" },
+  { id: "1", name: "Admin GAPP", email: "admin@gapp.es", role: "ADMIN", createdAt: "2026-01-15" },
+  { id: "2", name: "Carlos Martínez", email: "carlos@gapp.es", role: "GARDENER", createdAt: "2026-02-01" },
+  { id: "3", name: "María López", email: "maria@gapp.es", role: "GARDENER", createdAt: "2026-02-10" },
+  { id: "4", name: "Ana García", email: "ana@cliente.es", role: "CLIENT", createdAt: "2026-03-01" },
+  { id: "5", name: "Pedro Sánchez", email: "pedro@cliente.es", role: "CLIENT", createdAt: "2026-03-05" },
+  { id: "6", name: "Laura Fernández", email: "laura@cliente.es", role: "CLIENT", createdAt: "2026-03-12" },
 ];
 
 export const sampleGardeners: Gardener[] = [

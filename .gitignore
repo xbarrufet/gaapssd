@@ -57,6 +57,7 @@ gappsdd_mobile/.env
 # Firebase credentials (sensitive — do not commit)
 **/google-services.json
 **/GoogleService-Info.plist
+gappsdd_mobile/lib/firebase_options.dart
 
 # Dependencies
 node_modules/

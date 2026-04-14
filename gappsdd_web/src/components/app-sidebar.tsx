@@ -9,7 +9,6 @@ import {
   Flower2,
   UserCircle,
   Settings,
-  LogOut,
 } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -26,6 +25,7 @@ import {
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
 import type { UserRole } from "@/types";
+import { LogoutButton } from "@/components/logout-button";
 
 const superAdminItems = [
   { title: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
@@ -102,10 +102,7 @@ export function AppSidebar({ role }: { role: UserRole | null }) {
             </SidebarMenuButton>
           </SidebarMenuItem>
           <SidebarMenuItem>
-            <SidebarMenuButton render={<Link href="/" />}>
-              <LogOut className="h-4 w-4" />
-              <span>Cerrar Sesión</span>
-            </SidebarMenuButton>
+            <LogoutButton />
           </SidebarMenuItem>
         </SidebarMenu>
       </SidebarFooter>
